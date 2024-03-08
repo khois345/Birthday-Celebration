@@ -105,7 +105,7 @@ export default function BirthdayCake() {
 
   useEffect(() => {
     // Only blow out the candle if the loudness is above 55
-    if (loudness >= 45) {
+    if (loudness >= 35) {
       if (DEBUG) {
         console.log("loudness:", loudness);
       }
