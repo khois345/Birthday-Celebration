@@ -5,6 +5,7 @@ import "../app/birthday-cake.scss";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
+import { isMobile } from "react-device-detect";
 
 const DEBUG = true;
 
@@ -104,13 +105,25 @@ export default function BirthdayCake() {
   }, []);
 
   useEffect(() => {
-    // Only blow out the candle if the loudness is above 55
-    if (loudness >= 35) {
-      if (DEBUG) {
-        console.log("loudness:", loudness);
-      }
+    // Different loudness threshold for mobile and desktop    
+    if (isMobile) {
+      // Only blow out the candle if the loudness is above 55
+      if (loudness >= 15) {
+        if (DEBUG) {
+          console.log("loudness:", loudness);
+        }
 
-      blowOutCandles();
+        blowOutCandles();
+      }
+    } else {
+      // Only blow out the candle if the loudness is above 55
+      if (loudness >= 45) {
+        if (DEBUG) {
+          console.log("loudness:", loudness);
+        }
+
+        blowOutCandles();
+      }
     }
   }, [loudness]);
 
