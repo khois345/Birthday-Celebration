@@ -17,8 +17,7 @@ interface CandlePosition {
 
 export default function BirthdayCake() {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
-  const { microphoneVolume, toggleMicrophone } = useMicrophone();
-  const [ doneRendering, setDoneRendering ] = useState(false);
+  const { microphoneVolume } = useMicrophone();
 
   // Simple utility functions ------------------------
   const randomNumberInRange = (min: number, max: number) => {
@@ -80,9 +79,9 @@ export default function BirthdayCake() {
       });
 
       // If there is no more candles to blow out, stop the microphone
-      if (candlePositions.filter((candle) => candle.isLit).length === 0) {
-        toggleMicrophone();
-      }
+      //  if (candlePositions.filter((candle) => candle.isLit).length === 0) {
+      //    // Do something
+      //  }
     }
   };
 
@@ -108,14 +107,7 @@ export default function BirthdayCake() {
     positions.sort((a, b) => b.y - a.y);
 
     setCandlePositions(positions);
-    setDoneRendering(true);
   }, []);
-
-  useEffect(() => {
-    if (doneRendering) {
-      toggleMicrophone();
-    }
-  }, [doneRendering]);
 
   useEffect(() => {
     // Different microphoneVolume threshold for mobile and desktop    

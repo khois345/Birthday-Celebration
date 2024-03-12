@@ -18,10 +18,10 @@ export default function Home() {
         /* Check if the components are mounted 
         as NextJS tends to render the page on the server side if not specified */
         isMounted && (
-          <body className="bg-neutral-700">
+          <>
             <CelebrationPageContent />
             <ToastContainer />
-          </body>
+          </>
         )
       }
     </>
