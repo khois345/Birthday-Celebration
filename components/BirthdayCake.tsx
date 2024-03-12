@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
+import { useUser } from "@/context/userContext"; // Updated import statement
 
 const DEBUG = true;
 
@@ -15,9 +16,12 @@ interface CandlePosition {
   isLit: boolean;
 }
 
-export default function BirthdayCake() {
+const BirthdayCake = () => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
   const { microphoneVolume, stopMicrophone } = useMicrophone();
+
+  // Get the age from the user context
+  const { age } = useUser();
 
   // Simple utility functions ------------------------
   const randomNumberInRange = (min: number, max: number) => {
@@ -92,7 +96,7 @@ export default function BirthdayCake() {
     const cakeWidth = (document.querySelector(".cake") as HTMLElement).offsetWidth;
     const icingHeight = (document.querySelector(".icing") as HTMLElement).offsetHeight;
     //  const numberOfCandles = randomNumberInRange(1, 100); // Number of candles you want to place on the cake
-    const numberOfCandles = 30; // Number of candles you want to place on the cake
+    const numberOfCandles = age; // Number of candles you want to place on the cake
 
     // Generate random x and y coordinates for each candle
     const positions = Array.from({ length: numberOfCandles }, () => {
@@ -188,3 +192,5 @@ export default function BirthdayCake() {
     </div>
   );
 }
+
+export default BirthdayCake;
