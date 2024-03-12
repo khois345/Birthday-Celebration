@@ -2,18 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface MicrophoneData {
-  loudness: number;
-}
-
 const useMicrophone = () => {
-  const [microphoneVolume, setmicrophoneVolume] = useState<MicrophoneData>({ loudness: 0 });
+  const [microphoneVolume, setmicrophoneVolume] = useState<number>(0);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const toggleMicrophone = () => {
+    setIsEnabled((prev) => !prev);  // prev is the previous state of isEnabled (useState hook)
+  };
 
   useEffect(() => {
     let cleanupFunction: (() => void) | null = null;
 
     const setupMicrophone = async () => {
+      if (!isEnabled) {
+        console.log('Microphone access not enabled');
+        return;
+      }
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const audioContext = new AudioContext();
@@ -39,7 +45,7 @@ const useMicrophone = () => {
             // Map the average volume to blow out candles
             const loudness = (averageVolume / 255) * 100; // Normalize volume to 0-100
 
-            setmicrophoneVolume({ loudness: loudness });
+            setmicrophoneVolume(loudness);
 
             // Repeat processing
             requestAnimationFrame(processMicrophoneData);
@@ -70,9 +76,9 @@ const useMicrophone = () => {
         cleanupFunction();
       }
     };
-  }, []);
+  }, [isEnabled]);
 
-  return microphoneVolume;
+  return { microphoneVolume, toggleMicrophone};
 };
 
 export default useMicrophone;

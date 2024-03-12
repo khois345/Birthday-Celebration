@@ -17,7 +17,8 @@ interface CandlePosition {
 
 export default function BirthdayCake() {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
-  const { loudness } = useMicrophone();
+  const { microphoneVolume, toggleMicrophone } = useMicrophone();
+  const [ doneRendering, setDoneRendering ] = useState(false);
 
   // Simple utility functions ------------------------
   const randomNumberInRange = (min: number, max: number) => {
@@ -58,7 +59,7 @@ export default function BirthdayCake() {
       // We use random percentage chance to blow out the candle to simulate realistic blowing
       // If no microphone input, we use Math.random() to simulate blowing
       // The louder the microphone input, the higher the success rate
-      // const successRate = loudness  === 0 ? Math.random() * 100 : loudness;
+      // const successRate = microphoneVolume  === 0 ? Math.random() * 100 : microphoneVolume;
       const successRate = normalRandom() * 100;
 
       await new Promise<void>((resolve) => {
@@ -73,10 +74,15 @@ export default function BirthdayCake() {
             }
           }
           resolve();
-        }, Math.max(0, 100 - loudness)); // Use max to avoid negative number
+        }, Math.max(0, 100 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
         /* The delay for animation speed (in milliseconds) 
             the louder the microphone input, the faster the animation */
       });
+
+      // If there is no more candles to blow out, stop the microphone
+      if (candlePositions.filter((candle) => candle.isLit).length === 0) {
+        toggleMicrophone();
+      }
     }
   };
 
@@ -102,30 +108,37 @@ export default function BirthdayCake() {
     positions.sort((a, b) => b.y - a.y);
 
     setCandlePositions(positions);
+    setDoneRendering(true);
   }, []);
 
   useEffect(() => {
-    // Different loudness threshold for mobile and desktop    
+    if (doneRendering) {
+      toggleMicrophone();
+    }
+  }, [doneRendering]);
+
+  useEffect(() => {
+    // Different microphoneVolume threshold for mobile and desktop    
     if (isMobile) {
-      // Only blow out the candle if the loudness is above 55
-      if (loudness >= 15) {
+      // Only blow out the candle if the microphoneVolume is above 55
+      if (microphoneVolume >= 15) {
         if (DEBUG) {
-          console.log("loudness:", loudness);
+          console.log("microphoneVolume:", microphoneVolume);
         }
 
         blowOutCandles();
       }
     } else {
-      // Only blow out the candle if the loudness is above 55
-      if (loudness >= 45) {
+      // Only blow out the candle if the microphoneVolume is above 55
+      if (microphoneVolume >= 45) {
         if (DEBUG) {
-          console.log("loudness:", loudness);
+          console.log("microphoneVolume:", microphoneVolume);
         }
 
         blowOutCandles();
       }
     }
-  }, [loudness]);
+  }, [microphoneVolume]);
 
   return (
     <div className="flex flex-col">
@@ -151,7 +164,7 @@ export default function BirthdayCake() {
               // Framer Motion properties
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              // delay based on the index of the candle to create a stagger effect
+              // delay based on the index of the candle to prevent stagger effects
               transition={{ delay: 0.5 + index * 0.1 }}
               // Candle properties
               key={index}
