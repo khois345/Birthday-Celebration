@@ -70,7 +70,7 @@ export default function BirthdayCake() {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
 
             if (DEBUG) {
-              console.log("successRate:", successRate);
+              //console.log("successRate:", successRate);
             }
           }
           resolve();
@@ -125,16 +125,14 @@ export default function BirthdayCake() {
         if (DEBUG) {
           console.log("microphoneVolume:", microphoneVolume);
         }
-
         blowOutCandles();
       }
     } else {
       // Only blow out the candle if the microphoneVolume is above 55
-      if (microphoneVolume >= 45) {
+      if (microphoneVolume >= 30) {
         if (DEBUG) {
           console.log("microphoneVolume:", microphoneVolume);
         }
-
         blowOutCandles();
       }
     }
