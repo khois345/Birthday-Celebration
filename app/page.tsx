@@ -16,20 +16,29 @@ export default function Home() {
   const username = searchParams.get("name");
   const userAge = searchParams.get("age");
 
-  if (username) {
-    if (name === null || name === "") {
-      setName(username as string);
-    }
-  }
-
-  if (userAge) {
-    setAge(parseInt(userAge));
-  }
-
   useEffect(() => {
     setIsMounted(true);
 
+    // Set the name and age from the URL if available
+    // Example: http://localhost:3000/?name=John&age=25
+    if (username) {
+      if (name === null || name === "") {
+        console.log("Setting name from URL")
+        setName(username as string);
+      }
+    }
+  
+    if (userAge) {
+      console.log("Setting age from URL")
+      setAge(Number(userAge));
+    }
+
   }, []);
+
+  useEffect(() => {
+    console.log("Name: ", name);
+    console.log("Age: ", age);
+  }, [name, age]);
 
   return (
     <>
