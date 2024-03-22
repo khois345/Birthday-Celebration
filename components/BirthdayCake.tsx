@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
-import { useUser } from "@/context/userContext"; // Updated import statement
+import { useUser } from "@/context/userContext";
+import { randomNumberInRange, normalRandom } from "@/utils/utilFunctions";
 
 const DEBUG = true;
 
@@ -23,26 +24,9 @@ const BirthdayCake = () => {
   // Get the age from the user context
   const { age } = useUser();
 
-  // Simple utility functions ------------------------
-  const randomNumberInRange = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  /* Function to generate a random number 
-      with a normal distribution (Gaussian distribution) between 0 and 1
-      for success percentage */
-  const normalRandom = () => {
-    let val = 0;
-    for (let i = 0; i < 6; i++) {
-      val += Math.random();
-    }
-    return val / 6;
-  };
-  //--------------------------------------------------
-
   // Function to blow out a single candle
   const blowOutCandle = (candle: { x: number; y: number; isLit: boolean }) => {
-    // Update the state to indicate the candle have been blown out
+    // Set the isLit property of the candle in the candlePositions useState to false
     setCandlePositions((prevPositions) =>
       prevPositions.map((position) =>
         position.x === candle.x && position.y === candle.y
@@ -64,6 +48,9 @@ const BirthdayCake = () => {
       // The louder the microphone input, the higher the success rate
       // const successRate = microphoneVolume  === 0 ? Math.random() * 100 : microphoneVolume;
       const successRate = normalRandom() * 100;
+      if (DEBUG) {
+        console.log("Success rate:", successRate);
+      }
 
       await new Promise<void>((resolve) => {
         // Call blowOutCandle function after a short delay
@@ -71,10 +58,6 @@ const BirthdayCake = () => {
           // If the success rate is higher than 60%, blow out the candle
           if (successRate > 50) {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
-
-            if (DEBUG) {
-              //console.log("successRate:", successRate);
-            }
           }
           resolve();
         }, Math.max(0, 100 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
@@ -95,7 +78,6 @@ const BirthdayCake = () => {
   useEffect(() => {
     const cakeWidth = (document.querySelector(".cake") as HTMLElement).offsetWidth;
     const icingHeight = (document.querySelector(".icing") as HTMLElement).offsetHeight;
-    //  const numberOfCandles = randomNumberInRange(1, 100); // Number of candles you want to place on the cake
     const numberOfCandles = age; // Number of candles you want to place on the cake
 
     // Generate random x and y coordinates for each candle
@@ -115,27 +97,20 @@ const BirthdayCake = () => {
   }, []);
 
   useEffect(() => {
-    // Different microphoneVolume threshold for mobile and desktop    
-    if (isMobile) {
-      // Only blow out the candle if the microphoneVolume is above 55
-      if (microphoneVolume >= 15) {
-        if (DEBUG) {
-          console.log("microphoneVolume:", microphoneVolume);
-        }
-        blowOutCandles();
-      }
-    } else {
-      // Only blow out the candle if the microphoneVolume is above 55
-      if (microphoneVolume >= 30) {
-        if (DEBUG) {
-          console.log("microphoneVolume:", microphoneVolume);
-        }
-        blowOutCandles();
-      }
+    if (DEBUG) {
+      console.log("Microphone volume:", microphoneVolume);
+      console.log("Device is mobile:", isMobile)
+    }
+
+    if (isMobile && microphoneVolume >= 15) {
+      blowOutCandles();
+    } else if (!isMobile && microphoneVolume >= 30) {
+      blowOutCandles();
     }
   }, [microphoneVolume]);
 
   return (
+    // Display the cake and candles on the screen using CSS classes
     <div className="flex flex-col">
       <div className="cake">
         <div className="plate"></div>
@@ -155,8 +130,7 @@ const BirthdayCake = () => {
           .slice()
           .reverse()
           .map((candlePosition, index) => (
-            <motion.div
-              // Framer Motion properties
+            <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               // delay based on the index of the candle to prevent stagger effects
@@ -170,7 +144,7 @@ const BirthdayCake = () => {
               }}
             >
               {candlePosition.isLit && (
-                <motion.div
+                <motion.div  // We use Framer Motion to animate the flame going out
                   className="flame"
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
