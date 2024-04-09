@@ -29,11 +29,11 @@ const Form = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pt-8">
       <div className="w-full max-w-xs"> {/* Goes with the form */}
         <form
           onSubmit={handleSubmit}
-          className="text-neutral-300 pl-5 pr-5 pt-8 pb-8 mb-4 rounded shadow-md bg-neutral-700"
+          className="text-neutral-300 pl-5 pr-5 pt-8 pb-8 mb-4 rounded-lg shadow-full bg-neutral-700"
         >
           <h2 className="text-lg font-bold mb-2 text-center">Enter the details of the birthday person</h2>
           <div className="mb-2">
