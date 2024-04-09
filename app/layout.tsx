@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import UserProvider from "@/context/userContext";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,9 +22,11 @@ export default function RootLayout({
         className={`${inter.className}
       bg-neutral-800`}
       >
-        <UserProvider>
-          {children}
-        </UserProvider>
+        <Suspense>
+          <UserProvider>
+            {children}
+          </UserProvider>
+        </Suspense>
       </body>
     </html>
   );
