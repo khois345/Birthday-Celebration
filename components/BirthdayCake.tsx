@@ -111,59 +111,64 @@ const BirthdayCake = () => {
 
   return (
     // Display the cake and candles on the screen using CSS classes
-    <div className="flex flex-col">
-      <div className="cake">
-        <div className="plate"></div>
-        <div className="layer layer-bottom"></div>
-        <div className="layer layer-middle"></div>
-        <div className="layer layer-top"></div>
-        <div className="icing"></div>
-        <div className="drip drip1"></div>
-        <div className="drip drip2"></div>
-        <div className="drip drip3"></div>
+    <>
+      <div className="flex justify-center">
+        <div className="cake">
+          <div className="plate"></div>
+          <div className="layer layer-bottom"></div>
+          <div className="layer layer-middle"></div>
+          <div className="layer layer-top"></div>
+          <div className="icing"></div>
+          <div className="drip drip1"></div>
+          <div className="drip drip2"></div>
+          <div className="drip drip3"></div>
 
-        {/* Add candles to the cake
-                Note: we want to use slide() to create a temporary copy and reverse its order
-                This way, the candles are rendered from the top to bottom
-                Making the bottom candles cover the top ones, avoiding overlapping*/}
-        {candlePositions
-          .slice()
-          .reverse()
-          .map((candlePosition, index) => (
-            <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              // delay based on the index of the candle to prevent stagger effects
-              transition={{ delay: 0.5 + index * 0.1 }}
-              // Candle properties
-              key={index}
-              className="candle"
-              style={{
-                left: `${candlePosition.x}px`,
-                top: `${candlePosition.y}px`,
-              }}
-            >
-              {candlePosition.isLit && (
-                <motion.div  // We use Framer Motion to animate the flame going out
-                  className="flame"
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1 }}
-                />
-              )}
+          {/* Add candles to the cake
+                  Note: we want to use slide() to create a temporary copy and reverse its order
+                  This way, the candles are rendered from the top to bottom
+                  Making the bottom candles cover the top ones, avoiding overlapping*/}
+          {candlePositions
+            .slice()
+            .reverse()
+            .map((candlePosition, index) => (
+              <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                // delay based on the index of the candle to prevent stagger effects
+                transition={{ delay: 0.5 + index * 0.1 }}
+                // Candle properties
+                key={index}
+                className="candle"
+                style={{
+                  left: `${candlePosition.x}px`,
+                  top: `${candlePosition.y}px`,
+                }}
+              >
+                {candlePosition.isLit && (
+                  <motion.div  // We use Framer Motion to animate the flame going out
+                    className="flame"
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                  />
+                )}
 
-              <div className="candle-wick"></div>
-            </motion.div>
-          ))}
+                <div className="candle-wick"></div>
+              </motion.div>
+            ))}
+        </div>
       </div>
-      <button
-        type="button"
-        onClick={() => blowOutCandles()}
-        className="bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-4 rounded"
-      >
-        Click to Blow Candles
-      </button>
-    </div>
+
+      <div className="flex justify-center mt-30">
+          <button
+          type="button"
+          onClick={() => blowOutCandles()}
+          className="bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-6 rounded-full"
+        >
+          Click to Blow Candles
+        </button>
+      </div>
+    </>
   );
 }
 
