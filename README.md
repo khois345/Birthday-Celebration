@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+--WORK IN PROGRESS-- This is a simple web application that simulates a cake in real life. The application will ask the user to enter their name, age, and regard to wish their loved ones, colleagues, or acquaintances a happy birthday. Once they enter the information, the website will render a birthday cake decorated with lit candles based on their age. The birthday person can make a wish and blow out the candles until no candles are lit, similar to how one receives a surprise birthday cake in real life. To make the blowing candles function possible, I implemented a microphone record and volume analyzer functions in javascript, converting microphone data into volume loudness based on a scale from 0 to 100. This way, I can adjust the loudness to trigger the blowing event according to the device type.
 
-## Getting Started
+This application is open-source, nonprofitable, and a personal project. The project was inspired by Tru Narla, aka mewtru. Narla is a software engineer who regularly streams fun coding projects on Twitch. She is also on several social media platforms like Instagram and TikTok. Here are links to her accounts:
 
-First, run the development server:
+Instagram: https://www.instagram.com/mewtru/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Twitch: https://www.twitch.tv/mewtru
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+References and citations:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Narla's birthday cake project: https://www.instagram.com/p/C02aFOdvisW/
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Birthday cake source: https://codepen.io/fazlurr/pen/gPMJMK
 
-## Learn More
+Tools, libraries, and frameworks:
 
-To learn more about Next.js, take a look at the following resources:
+NextJS, Typescript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+react-toastify, react-device-detect
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+TailwindCSS, SASS
