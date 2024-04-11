@@ -48,18 +48,65 @@ const Form = () => {
               className="shadow appearance-none rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
+
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
               Enter age
             </label>
-            
-            <input
-              type="number"
-              value={userAge}
-              onChange={(e) => handleUserAge(parseInt(e.target.value))}
-              className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none focus:shadow-outline"
-            />
+            <div className="relative flex items-center ">
+              <button
+                type="button"
+                id="decrease-button"
+                onClick={() => handleUserAge(userAge - 1)}
+                className="bg-gray-600 hover:bg-gray-500 border rounded-l-lg p-3 h-9 focus:ring-gray-100"
+              >
+                <svg
+                  className="w-3 h-3 text-gray-900 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 2"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 1h16"
+                  />
+                </svg>
+              </button>
+              <input
+                type="number"
+                value={userAge}
+                onChange={(e) => handleUserAge(parseInt(e.target.value))}
+                className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <button
+                type="button"
+                id="increase-button"
+                onClick={() => handleUserAge(userAge + 1)}
+                className="bg-gray-600 hover:bg-gray-500 border rounded-e-lg p-3 h-9 focus:ring-gray-100"
+              >
+                <svg
+                  className="w-3 h-3 text-gray-900 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 18"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 1v16M1 9h16"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
+
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
               Enter birthday regard

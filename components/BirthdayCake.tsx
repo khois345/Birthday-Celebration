@@ -61,8 +61,8 @@ const BirthdayCake = () => {
           }
           resolve();
         }, Math.max(0, 100 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
-        /* The delay for animation speed (in milliseconds) 
-            the louder the microphone input, the faster the animation */
+        /* The delay for timeout speed (in milliseconds) 
+            the louder the microphone input, the shorter the time between blowOutCandle calls */
       });
     }
 
@@ -102,7 +102,7 @@ const BirthdayCake = () => {
       console.log("Device is mobile:", isMobile)
     }
 
-    if (isMobile && microphoneVolume >= 15) {
+    if (isMobile && microphoneVolume >= 20) {
       blowOutCandles();
     } else if (!isMobile && microphoneVolume >= 30) {
       blowOutCandles();
