@@ -7,14 +7,45 @@ const Form = () => {
   const [username, setUsername] = useState<string>("");
   const [userAge, setUserAge] = useState<number>(0);
   const [userRegard, setUserRegard] = useState<string>("");
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
-  const handleUserAge = (age: number) => {
-    if (age < 0) {
-      setUserAge(0);
-    } else if (age > 150) {
-      setUserAge(150);
+  // Age validation
+  const handleUserAgeChange = (newAge: number) => {
+    if (newAge < 0) {
+      return 0;
+    } else if (newAge > 150) {
+      return 150;
     } else {
-      setUserAge(age);
+      return newAge;
+    }
+  };
+
+  // Adjust age when the increase/decrease button is clicked and held
+  const decreaseAge = () => {
+    setUserAge((prevAge) => handleUserAgeChange(prevAge - 1));
+  };
+
+  const increaseAge = () => {
+    setUserAge((prevAge) => handleUserAgeChange(prevAge + 1));
+  };
+
+  // We trigger setInterval to trigger decreaseAge/decreaseAge multiple times when the button is clicked and held
+  const handleMouseDown = (increment: boolean) => {
+    const id = setInterval(() => {
+      if (increment) {
+        increaseAge();
+      } else {
+        decreaseAge();
+      }
+    }, 120); // Adjust the interval (the lower the faster) (milliseconds)
+
+    setIntervalId(id);
+  };
+
+  const handleMouseUp = () => {
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+      setIntervalId(null);
     }
   };
 
@@ -23,7 +54,7 @@ const Form = () => {
     e.preventDefault();
     setName(username);
     setAge(userAge);
-    if (userRegard != "") {
+    if (userRegard !== "") {
       setRegard(userRegard);
     }
   };
@@ -36,6 +67,8 @@ const Form = () => {
           className="text-neutral-300 pl-5 pr-5 pt-8 pb-8 mb-4 rounded-lg shadow-full bg-neutral-700"
         >
           <h2 className="text-lg font-bold mb-2 text-center">Enter the details of the birthday person</h2>
+          
+          {/* Name session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
               Enter name
@@ -49,6 +82,7 @@ const Form = () => {
             />
           </div>
 
+          {/* Age session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
               Enter age
@@ -57,7 +91,9 @@ const Form = () => {
               <button
                 type="button"
                 id="decrease-button"
-                onClick={() => handleUserAge(userAge - 1)}
+                onMouseDown={() => handleMouseDown(false)}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
                 className="bg-gray-600 hover:bg-gray-500 border rounded-l-lg p-3 h-9 focus:ring-gray-100"
               >
                 <svg
@@ -79,13 +115,15 @@ const Form = () => {
               <input
                 type="number"
                 value={userAge}
-                onChange={(e) => handleUserAge(parseInt(e.target.value))}
+                onChange={(e) => setUserAge(handleUserAgeChange(parseInt(e.target.value)))}
                 className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none focus:shadow-outline"
               />
               <button
                 type="button"
                 id="increase-button"
-                onClick={() => handleUserAge(userAge + 1)}
+                onMouseDown={() => handleMouseDown(true)}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
                 className="bg-gray-600 hover:bg-gray-500 border rounded-e-lg p-3 h-9 focus:ring-gray-100"
               >
                 <svg
@@ -107,6 +145,7 @@ const Form = () => {
             </div>
           </div>
 
+          {/* Regards session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
               Enter birthday regard
