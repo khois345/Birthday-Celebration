@@ -30,7 +30,7 @@ const Form = () => {
   };
 
   // We trigger setInterval to trigger decreaseAge/decreaseAge multiple times when the button is clicked and held
-  const handleMouseDown = (increment: boolean) => {
+  const handleInteractionStart = (increment: boolean) => {
     const id = setInterval(() => {
       if (increment) {
         increaseAge();
@@ -42,7 +42,7 @@ const Form = () => {
     setIntervalId(id);
   };
 
-  const handleMouseUp = () => {
+  const handleInteractionEnd = () => {
     if (intervalId !== null) {
       clearInterval(intervalId);
       setIntervalId(null);
@@ -91,9 +91,11 @@ const Form = () => {
               <button
                 type="button"
                 id="decrease-button"
-                onMouseDown={() => handleMouseDown(false)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                onMouseDown={() => handleInteractionStart(false)}
+                onTouchStart={() => handleInteractionStart(false)}
+                onMouseUp={handleInteractionEnd}
+                onTouchEnd={handleInteractionEnd}
+                onMouseLeave={handleInteractionEnd}
                 className="bg-gray-600 hover:bg-gray-500 border rounded-l-lg p-3 h-9 focus:ring-gray-100"
               >
                 <svg
@@ -121,9 +123,11 @@ const Form = () => {
               <button
                 type="button"
                 id="increase-button"
-                onMouseDown={() => handleMouseDown(true)}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                onMouseDown={() => handleInteractionStart(true)}
+                onTouchStart={() => handleInteractionStart(true)}
+                onMouseUp={handleInteractionEnd}
+                onTouchEnd={handleInteractionEnd}
+                onMouseLeave={handleInteractionEnd}
                 className="bg-gray-600 hover:bg-gray-500 border rounded-e-lg p-3 h-9 focus:ring-gray-100"
               >
                 <svg
