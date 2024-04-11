@@ -76,7 +76,6 @@ const Form = () => {
                 value={userAge}
                 onChange={(e) => handleUserAge(parseInt(e.target.value))}
                 className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none focus:shadow-outline"
-                nputMode="numeric"  // This will hide the arrows on the input fieldi
               />
               <button
                 type="button"
