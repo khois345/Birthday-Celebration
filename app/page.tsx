@@ -2,6 +2,7 @@
 
 import './globals.css'
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
 import CelebrationPageContent from "@/components/CelebrationPageContent";
 import { useSearchParams } from "next/navigation";
@@ -40,12 +41,12 @@ export default function Home() {
 
   return (
     <>
+      <ToastContainer />
       {/* Check if the name and age are set */}
       {name && age >= 1
       ? (<CelebrationPageContent />)
       : (<Form />)
       }
-      <ToastContainer />
     </>
   );
 }

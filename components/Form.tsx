@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useUser } from "@/context/userContext";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Form = () => {
   const {setName, setAge, regard, setRegard} = useUser();
@@ -51,12 +53,26 @@ const Form = () => {
 
   // Set data on submit
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setName(username);
-    setAge(userAge);
-    if (userRegard !== "") {
-      setRegard(userRegard);
+    if (userAge === 0) {
+      toast.warning("Please enter a valid age", { position: "top-center"});
+      
+    } else if (username === "") {
+      toast.warning("Please enter a name", { position: "top-center"});
+      
+    } else if (userAge === 0 && username === "") {
+      toast.warning("Please enter a name and a valid age",  { position: "top-center"});
+    } else {
+      // If all required fields are filled, set the name and age
+      setName(username);
+      setAge(userAge);
+      if (userRegard !== "") {
+        setRegard(userRegard);
+      }
     }
+
+    // Prevent the form from rendering the default page 
+    // (helps prevent losing the entered data on submit)
+    e.preventDefault();
   };
 
   return (
@@ -93,10 +109,11 @@ const Form = () => {
                 id="decrease-button"
                 onMouseDown={() => handleInteractionStart(false)}
                 onTouchStart={() => handleInteractionStart(false)}
+                onClick={decreaseAge}
                 onMouseUp={handleInteractionEnd}
                 onTouchEnd={handleInteractionEnd}
                 onMouseLeave={handleInteractionEnd}
-                className="bg-gray-600 hover:bg-gray-500 border rounded-l-lg p-3 h-9 focus:ring-gray-100"
+                className="bg-gray-600 hover:bg-gray-500 border rounded-l-lg p-3 h-9 leading-tight focus:outline-none "
               >
                 <svg
                   className="w-3 h-3 text-gray-900 dark:text-white"
@@ -118,17 +135,18 @@ const Form = () => {
                 type="number"
                 value={userAge}
                 onChange={(e) => setUserAge(handleUserAgeChange(parseInt(e.target.value)))}
-                className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none"
               />
               <button
                 type="button"
                 id="increase-button"
                 onMouseDown={() => handleInteractionStart(true)}
                 onTouchStart={() => handleInteractionStart(true)}
+                onClick={increaseAge}
                 onMouseUp={handleInteractionEnd}
                 onTouchEnd={handleInteractionEnd}
                 onMouseLeave={handleInteractionEnd}
-                className="bg-gray-600 hover:bg-gray-500 border rounded-e-lg p-3 h-9 focus:ring-gray-100"
+                className="bg-gray-600 hover:bg-gray-500 border rounded-e-lg p-3 h-9 leading-tight outline-none"
               >
                 <svg
                   className="w-3 h-3 text-gray-900 dark:text-white"
@@ -152,7 +170,7 @@ const Form = () => {
           {/* Regards session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
-              Enter birthday regard
+              Enter birthday regard (optional)
             </label>
             <textarea
               value={userRegard}
