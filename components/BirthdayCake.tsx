@@ -60,7 +60,7 @@ const BirthdayCake = () => {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
           }
           resolve();
-        }, Math.max(0, 100 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
+        }, Math.max(0, 60 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
         /* The delay for timeout speed (in milliseconds) 
             the louder the microphone input, the shorter the time between blowOutCandle calls */
       });
