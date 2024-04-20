@@ -47,7 +47,7 @@ const BirthdayCake = () => {
       // If no microphone input, we use Math.random() to simulate blowing
       // The louder the microphone input, the higher the success rate
       // const successRate = microphoneVolume  === 0 ? Math.random() * 100 : microphoneVolume;
-      const successRate = normalRandom() * 100;
+      const successRate = Math.max(100, normalRandom() * 100 + microphoneVolume);
       if (DEBUG) {
         console.log("Success rate:", successRate);
       }
@@ -56,11 +56,11 @@ const BirthdayCake = () => {
         // Call blowOutCandle function after a short delay
         setTimeout(() => {
           // If the success rate is higher than 60%, blow out the candle
-          if (successRate > 50) {
+          if (successRate > 70) {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
           }
           resolve();
-        }, Math.max(0, 60 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
+        }, Math.max(0, 50 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
         /* The delay for timeout speed (in milliseconds) 
             the louder the microphone input, the shorter the time between blowOutCandle calls */
       });
@@ -99,12 +99,11 @@ const BirthdayCake = () => {
   useEffect(() => {
     if (DEBUG) {
       console.log("Microphone volume:", microphoneVolume);
-      console.log("Device is mobile:", isMobile)
     }
 
     if (isMobile && microphoneVolume >= 20) {
       blowOutCandles();
-    } else if (!isMobile && microphoneVolume >= 30) {
+    } else if (!isMobile && microphoneVolume >= 25) {
       blowOutCandles();
     }
   }, [microphoneVolume]);
@@ -135,7 +134,7 @@ const BirthdayCake = () => {
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 // delay based on the index of the candle to prevent stagger effects
-                transition={{ delay: 0.5 + index * 0.1 }}
+                transition={{ delay: index * 0.03}}
                 // Candle properties
                 key={index}
                 className="candle"
