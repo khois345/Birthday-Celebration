@@ -22,7 +22,6 @@ interface CandlePosition {
 const BirthdayCake = () => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
   const { microphoneVolume, stopMicrophone } = useMicrophone();
-  const [doneRendering, setDoneRendering] = useState<boolean>(false);
   const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
 
   // Get the age from the user context
@@ -55,7 +54,7 @@ const BirthdayCake = () => {
       // If no microphone input, we use Math.random() to simulate blowing
       // The louder the microphone input, the higher the success rate
       // const successRate = microphoneVolume  === 0 ? Math.random() * 100 : microphoneVolume;
-      const successRate = Math.max(100, normalRandom() * 100 + microphoneVolume);
+      const successRate = Math.min(100, normalRandom() * 100 + microphoneVolume);
       if (DEBUG) {
         console.log("Success rate:", successRate);
       }
@@ -63,8 +62,8 @@ const BirthdayCake = () => {
       await new Promise<void>((resolve) => {
         // Call blowOutCandle function after a short delay
         setTimeout(() => {
-          // If the success rate is higher than 60%, blow out the candle
-          if (successRate > 70) {
+          // If the success rate is higher than 95%, blow out the candle
+          if (successRate > 95) {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
           }
           resolve();
@@ -104,7 +103,7 @@ const BirthdayCake = () => {
     setCandlePositions(positions);
 
     return () => {
-      toast.info("Please blow to the microphone to blow out the candles", { position: "top-right" });
+      toast.info("Please blow to the microphone to blow out the candles", { position: "bottom-center" });
     }
   }, []);
 
@@ -148,7 +147,7 @@ const BirthdayCake = () => {
               <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: isMobile ? (0.5 + index * 0.1) : (index * 0.03) }}
+                transition={{ delay: isMobile ? (0.8 + index * 0.1) : (index * 0.03) }}
                 // Candle properties
                 key={index}
                 className="candle"
@@ -165,7 +164,7 @@ const BirthdayCake = () => {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     // The larger the age, the faster the duration of the flame going out
-                    transition={{ duration: age > 40 ? 0.6 : (0.4 - age * 0.05)}}
+                    transition={{ duration: age < 40 ? 0.6 : (0.4 - age * 0.05)}}
                   />
                 )}
 
