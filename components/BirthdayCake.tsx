@@ -8,6 +8,8 @@ import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange, normalRandom } from "@/utils/utilFunctions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DEBUG = true;
 
@@ -20,6 +22,8 @@ interface CandlePosition {
 const BirthdayCake = () => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
   const { microphoneVolume, stopMicrophone } = useMicrophone();
+  const [doneRendering, setDoneRendering] = useState<boolean>(false);
+  const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
 
   // Get the age from the user context
   const { age } = useUser();
@@ -38,6 +42,10 @@ const BirthdayCake = () => {
 
   // Function to blow out many candles at once (use for microphone input)
   const blowOutCandles = async () => {
+    if (renderedCandlesCount != candlePositions.length) {
+      return;
+    }
+
     // Filter the candles that are currently lit
     const litCandles = candlePositions.filter((candle) => candle.isLit);
 
@@ -94,6 +102,10 @@ const BirthdayCake = () => {
     positions.sort((a, b) => b.y - a.y);
 
     setCandlePositions(positions);
+
+    return () => {
+      toast.info("Please blow to the microphone to blow out the candles", { position: "top-right" });
+    }
   }, []);
 
   useEffect(() => {
@@ -123,9 +135,12 @@ const BirthdayCake = () => {
           <div className="drip drip3"></div>
 
           {/* Add candles to the cake
-                  Note: we want to use slide() to create a temporary copy and reverse its order
-                  This way, the candles are rendered from the top to bottom
-                  Making the bottom candles cover the top ones, avoiding overlapping*/}
+              Note: we want to use slide() to create a temporary copy and reverse its order
+              This way, the candles are rendered from the top to bottom
+              Making the bottom candles cover the top ones, avoiding overlapping*/
+          /* Due to the limited hardward of smartphones, we need to set different framer motion
+              render speed to reduce stagger effect */}
+
           {candlePositions
             .slice()
             .reverse()
@@ -133,8 +148,7 @@ const BirthdayCake = () => {
               <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                // delay based on the index of the candle to prevent stagger effects
-                transition={{ delay: index * 0.03}}
+                transition={{ delay: isMobile ? (0.5 + index * 0.1) : (index * 0.03) }}
                 // Candle properties
                 key={index}
                 className="candle"
@@ -142,13 +156,16 @@ const BirthdayCake = () => {
                   left: `${candlePosition.x}px`,
                   top: `${candlePosition.y}px`,
                 }}
+                // Keep track of rendered candles to prevent blowing candles during rendering
+                onAnimationComplete={() => setRenderedCandlesCount((prevCount) => prevCount + 1)}
               >
                 {candlePosition.isLit && (
                   <motion.div  // We use Framer Motion to animate the flame going out
                     className="flame"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 1 }}
+                    // The larger the age, the faster the duration of the flame going out
+                    transition={{ duration: age > 40 ? 0.6 : (0.4 - age * 0.05)}}
                   />
                 )}
 

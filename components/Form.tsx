@@ -11,6 +11,7 @@ const Form = () => {
   const [userRegard, setUserRegard] = useState<string>("");
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
+  // Functions for handling the form data and user interaction--------------------------------------------
   // Age validation
   const handleUserAgeChange = (newAge: number) => {
     if (newAge < 0) {
@@ -59,21 +60,22 @@ const Form = () => {
     } else if (username === "") {
       toast.warning("Please enter a name", { position: "top-center"});
       
-    } else if (userAge === 0 && username === "") {
+    } else if ((userAge === 0 || !userAge) && username === "") {
       toast.warning("Please enter a name and a valid age",  { position: "top-center"});
-    } else {
-      // If all required fields are filled, set the name and age
+    } else if (userRegard !== "") {
+      setRegard(userRegard);
       setName(username);
       setAge(userAge);
-      if (userRegard !== "") {
-        setRegard(userRegard);
-      }
+    } else {
+      setName(username);
+      setAge(userAge);
     }
 
     // Prevent the form from rendering the default page 
     // (helps prevent losing the entered data on submit)
     e.preventDefault();
   };
+  //------------------------------------------------------------------------------------------------------------
 
   return (
     <div className="flex justify-center pt-8">

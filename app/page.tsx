@@ -20,18 +20,17 @@ export default function Home() {
   useEffect(() => {
     // Set the name and age from the URL if available
     // Example: http://localhost:3000/?name=John&age=25
-    if (username) {
-      if (name === null || name === "") {
-        console.log("Setting name from URL")
-        setName(username as string);
-      }
+    if (username && (name === null || name === "")) {
+      console.log("Setting name from URL")
+      setName(username as string);
     }
   
-    if (userAge) {
+    if (userAge && Number(userAge) <= 150 && Number(userAge) >= 1){
       console.log("Setting age from URL")
       setAge(Number(userAge));
+    } else {
+      console.log("Invalid age from URL")
     }
-
   }, []);
 
   useEffect(() => {
