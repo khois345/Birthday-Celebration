@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useMicrophone = () => {
   const [microphoneVolume, setMicrophoneVolume] = useState<number>(0);
-  const [isEnable, setIsEnable] = useState<boolean>(false);
+  const [isEnable, setIsEnable] = useState<boolean>(true);
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -51,7 +51,7 @@ const useMicrophone = () => {
   
     } catch (error) {
       console.error("Error accessing microphone:", error);
-      setIsEnable(true);
+      setIsEnable(false);
     }
   };  
 
@@ -59,8 +59,10 @@ const useMicrophone = () => {
     setupMicrophone();
 
     return () => {
-      if (isEnable) {
+      if (!isEnable) {
         toast.error("Please allow microphone access for the full experience");
+      } else {
+        toast.info("Please blow to the microphone to blow out the candles");
       }
 
       if (audioContextRef.current) {

@@ -16,8 +16,8 @@ const Form = () => {
   const handleUserAgeChange = (newAge: number) => {
     if (newAge < 0) {
       return 0;
-    } else if (newAge > 150) {
-      return 150;
+    } else if (newAge > 120) {
+      return 120;
     } else {
       return newAge;
     }

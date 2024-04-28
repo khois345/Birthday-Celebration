@@ -8,7 +8,6 @@ import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange, normalRandom } from "@/utils/utilFunctions";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DEBUG = true;
@@ -101,11 +100,7 @@ const BirthdayCake = () => {
     positions.sort((a, b) => b.y - a.y);
 
     setCandlePositions(positions);
-
-    return () => {
-      toast.info("Please blow to the microphone to blow out the candles", { position: "bottom-center" });
-    }
-  }, []);
+  }, []); // Render the candles only once when the component mounts
 
   useEffect(() => {
     if (DEBUG) {
@@ -117,7 +112,7 @@ const BirthdayCake = () => {
     } else if (!isMobile && microphoneVolume >= 25) {
       blowOutCandles();
     }
-  }, [microphoneVolume]);
+  }, [microphoneVolume]); // Trigger the effect when the microphoneVolume changes
 
   return (
     // Display the cake and candles on the screen using CSS classes

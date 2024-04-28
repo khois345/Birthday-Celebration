@@ -5,7 +5,7 @@ export default function CelebrationPageContent() {
   const { name, regard } = useUser();
 
   return (
-    <div className="items-center justify-center flex flex-col text-white">
+    <div className="items-center justify-center flex flex-col text-white text-center">
       <h1 className="text-4xl font-medium mb-2 mt-8">
         {name},{" "}
         <span className="text-transparent font-extrabold bg-clip-text bg-gradient-to-r from-red-500 via-yellow-400 via-30% to-sky-400">
