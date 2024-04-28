@@ -62,7 +62,7 @@ const BirthdayCake = () => {
         // Call blowOutCandle function after a short delay
         setTimeout(() => {
           // If the success rate is higher than 95%, blow out the candle
-          if (successRate > 95) {
+          if (successRate > 70) {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
           }
           resolve();
@@ -142,7 +142,7 @@ const BirthdayCake = () => {
               <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: isMobile ? (0.8 + index * 0.1) : (index * 0.03) }}
+                transition={{ delay: isMobile ? (0.6 + index * 0.1) : (index * 0.03) }}
                 // Candle properties
                 key={index}
                 className="candle"
@@ -158,8 +158,8 @@ const BirthdayCake = () => {
                     className="flame"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    // The larger the age, the faster the duration of the flame going out
-                    transition={{ duration: age < 40 ? 0.6 : (0.4 - age * 0.05)}}
+                    // The larger the age, the slower the duration of the flame going out to prevent lag
+                    transition={{ duration: age > 40 ? 0.6 : (0.4 - age * 0.05)}}
                   />
                 )}
 
