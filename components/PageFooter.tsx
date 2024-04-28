@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Footer() {
+export default function PageFooter() {
 return (
     <footer className='fixed bottom-0 left-0 w-full mb-10 px-4 text-center text-gray-400'>
         <small className='mb-2 block text-xs'>

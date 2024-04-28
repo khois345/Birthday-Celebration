@@ -8,7 +8,7 @@ import CelebrationPageContent from "@/components/CelebrationPageContent";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/context/userContext";
 import Form from "@/components/Form";
-import Footer from "@/components/Footer";
+import PageFooter from '@/components/PageFooter';
 
 export default function Home() {
   // Check if the component is mounted to prevent rendering on the server
@@ -47,7 +47,7 @@ export default function Home() {
       ? (<CelebrationPageContent />)
       : (<Form />)
       }
-      <Footer />
+      <PageFooter />
     </>
   );
 }
