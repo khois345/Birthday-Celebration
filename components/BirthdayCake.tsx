@@ -8,7 +8,6 @@ import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange, normalRandom } from "@/utils/utilFunctions";
-import "react-toastify/dist/ReactToastify.css";
 
 const DEBUG = true;
 

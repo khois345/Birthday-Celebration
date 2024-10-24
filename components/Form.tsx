@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useUser } from "@/context/userContext";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 const Form = () => {

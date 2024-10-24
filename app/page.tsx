@@ -2,8 +2,7 @@
 
 import './globals.css'
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import CelebrationPageContent from "@/components/CelebrationPageContent";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/context/userContext";
