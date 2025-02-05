@@ -60,7 +60,7 @@ const BirthdayCake = () => {
       await new Promise<void>((resolve) => {
         // Call blowOutCandle function after a short delay
         setTimeout(() => {
-          // If the success rate is higher than 95%, blow out the candle
+          // If the success rate is higher than 70%, blow out the candle
           if (successRate > 70) {
             blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
           }
