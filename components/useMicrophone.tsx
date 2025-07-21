@@ -51,6 +51,7 @@ const useMicrophone = () => {
   
     } catch (error) {
       console.error("Error accessing microphone:", error);
+      toast.error("Please allow microphone access for the full experience");
       setIsEnable(false);
     }
   };  
@@ -59,14 +60,8 @@ const useMicrophone = () => {
     setupMicrophone();
 
     return () => {
-      if (!isEnable) {
-        toast.error("Please allow microphone access for the full experience");
-      } else {
+      if (isEnable) {
         toast.info("Please blow to the microphone to blow out the candles");
-      }
-
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
       }
     };
   }, []);
