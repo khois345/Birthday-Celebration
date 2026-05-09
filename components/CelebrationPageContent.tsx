@@ -1,8 +1,21 @@
+"use client";
+
+import { useEffect } from "react";
 import BirthdayCake from "@/components/BirthdayCake";
 import { useUser } from "@/context/userContext";
 
-export default function CelebrationPageContent() {
-  const { name, regard } = useUser();
+interface CelebrationPageContentProps {
+  sessionId: string;
+}
+
+export default function CelebrationPageContent({ sessionId }: CelebrationPageContentProps) {
+  const { name, regard, loadUserData } = useUser();
+
+  useEffect(() => {
+    if (sessionId) {
+      loadUserData(sessionId);
+    }
+  }, [sessionId, loadUserData]);
 
   return (
     <>
