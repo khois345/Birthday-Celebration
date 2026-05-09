@@ -4,7 +4,7 @@ export default function PageFooter() {
 return (
     <footer className='relative bottom-0 left-0 w-full mt-10 text-center text-gray-400'>
         <small className='mb-2 block text-xs'>
-            &copy; 2024 Tran. All rights reserved.
+            &copy; 2026 Tran. All rights reserved.
         </small>
 
         <div className='text-xs'>
