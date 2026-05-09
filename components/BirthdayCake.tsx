@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
-import { randomNumberInRange, normalRandom } from "@/utils/utilFunctions";
+import { randomNumberInRange } from "@/utils/utilFunctions";
 
 const DEBUG = true;
 
@@ -19,11 +19,15 @@ interface CandlePosition {
 
 const BirthdayCake = () => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
-  const { microphoneVolume, stopMicrophone } = useMicrophone();
+  const { microphoneVolume, averageVolume, isBlowing, stopMicrophone } = useMicrophone();
   const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
 
   // Get the age from the user context
   const { age } = useUser();
+
+  if (DEBUG) {
+    console.log("Volume:", microphoneVolume.toFixed(2), "Average:", averageVolume.toFixed(2), "Blowing:", isBlowing);
+  }
 
   // Function to blow out a single candle
   const blowOutCandle = (candle: { x: number; y: number; isLit: boolean }) => {
@@ -48,33 +52,29 @@ const BirthdayCake = () => {
 
     // Iterate through each lit candle and blow it out
     for (const candle of litCandles) {
-      // We use random percentage chance to blow out the candle to simulate realistic blowing
-      // If no microphone input, we use Math.random() to simulate blowing
-      // The louder the microphone input, the higher the success rate
-      // const successRate = microphoneVolume  === 0 ? Math.random() * 100 : microphoneVolume;
-      const successRate = Math.min(100, normalRandom() * 100 + microphoneVolume);
-      if (DEBUG) {
-        console.log("Success rate:", successRate);
+      // 98% success rate when blowing
+      if (Math.random() > 0.02) {
+        blowOutCandle(candle);
       }
-
+      
       await new Promise<void>((resolve) => {
-        // Call blowOutCandle function after a short delay
         setTimeout(() => {
-          // If the success rate is higher than 70%, blow out the candle
-          if (successRate > 70) {
-            blowOutCandle(candle); // Pass the candle object to the blowOutCandle function
-          }
           resolve();
-        }, Math.max(0, 50 - Number(microphoneVolume))); // Convert microphoneVolume to number before performing arithmetic operation
-        /* The delay for timeout speed (in milliseconds) 
-            the louder the microphone input, the shorter the time between blowOutCandle calls */
+        }, 25);
       });
     }
 
     // If there is no more candles to blow out, stop the microphone
     if (candlePositions.filter((candle) => candle.isLit).length === 0) {
       stopMicrophone();
-      console.log("Microphone stopped");
+    }
+  };
+
+  // Function to blow out all candles immediately (use for button click)
+  const blowOutAllCandles = async () => {
+    // Repeatedly call blowOutCandles until all are blown
+    while (candlePositions.filter((candle) => candle.isLit).length > 0) {
+      await blowOutCandles();
     }
   };
 
@@ -102,16 +102,10 @@ const BirthdayCake = () => {
   }, []); // Render the candles only once when the component mounts
 
   useEffect(() => {
-    if (DEBUG) {
-      console.log("Microphone volume:", microphoneVolume);
-    }
-
-    if (isMobile && microphoneVolume >= 20) {
-      blowOutCandles();
-    } else if (!isMobile && microphoneVolume >= 25) {
+    if (isBlowing) {
       blowOutCandles();
     }
-  }, [microphoneVolume]); // Trigger the effect when the microphoneVolume changes
+  }, [isBlowing]); // Trigger the effect when isBlowing changes
 
   return (
     // Display the cake and candles on the screen using CSS classes
@@ -157,8 +151,8 @@ const BirthdayCake = () => {
                     className="flame"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    // The larger the age, the slower the duration of the flame going out to prevent lag
-                    transition={{ duration: age > 40 ? 0.6 : (0.4 - age * 0.05)}}
+                    // Flame fade duration scales with age: younger = faster, older = slower
+                    transition={{ duration: Math.max(0.15, Math.min(0.8, 0.15 + age * 0.01)) }}
                   />
                 )}
 
@@ -171,7 +165,7 @@ const BirthdayCake = () => {
       <div className="flex justify-center mt-30">
           <button
           type="button"
-          onClick={() => blowOutCandles()}
+          onClick={() => blowOutAllCandles()}
           className="bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-6 rounded-full"
         >
           Click to Blow Candles
