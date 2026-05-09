@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { isMobile } from "react-device-detect";
 
 const useMicrophone = () => {
   const [microphoneVolume, setMicrophoneVolume] = useState<number>(0);
@@ -44,8 +45,9 @@ const useMicrophone = () => {
           ? volumeHistoryRef.current.reduce((a, b) => a + b, 0) / volumeHistoryRef.current.length
           : 0;
 
-        // Detect blow when volume spikes above 3x the average
-        const detected = runningAverage > 0 && currentVolume > runningAverage * 3;
+        // Detect blow: desktop 2.5x, mobile 4x
+        const threshold = isMobile ? 4 : 2.5;
+        const detected = runningAverage > 0 && currentVolume > runningAverage * threshold;
 
         setMicrophoneVolume(currentVolume);
         setAverageVolume(runningAverage);
