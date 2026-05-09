@@ -59,7 +59,7 @@ const BirthdayCake = () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           resolve();
-        }, 100);
+        }, 25);
       });
     }
 
