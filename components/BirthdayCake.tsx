@@ -5,6 +5,7 @@ import "../app/birthday-cake.scss";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
+import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange } from "@/utils/utilFunctions";
 
@@ -134,7 +135,7 @@ const BirthdayCake = () => {
               <motion.div   // We use Framer Motion to animate the candle dropping from the top animation
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.03 }}
+                transition={{ delay: isMobile ? (0.6 + index * 0.1) : (index * 0.03) }}
                 // Candle properties
                 key={index}
                 className="candle"
