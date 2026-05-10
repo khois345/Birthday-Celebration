@@ -45,8 +45,8 @@ const useMicrophone = () => {
           ? volumeHistoryRef.current.reduce((a, b) => a + b, 0) / volumeHistoryRef.current.length
           : 0;
 
-        // Detect blow: desktop 3x, mobile 3.5x
-        const threshold = isMobile ? 3.5 : 3;
+        // Detect blow: desktop 3x, mobile 4x
+        const threshold = isMobile ? 4 : 3;
         const detected = runningAverage > 0 && currentVolume > runningAverage * threshold;
 
         setMicrophoneVolume(currentVolume);

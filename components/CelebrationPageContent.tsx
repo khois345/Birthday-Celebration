@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BirthdayCake from "@/components/BirthdayCake";
-import ShareUrlSection from "@/components/ShareUrlSection";
+import QuickActions from "@/components/QuickActions";
 import { useUser } from "@/context/userContext";
 
 interface CelebrationPageContentProps {
@@ -49,7 +49,7 @@ export default function CelebrationPageContent({ sessionId }: CelebrationPageCon
         </div>
       </div>
       <BirthdayCake />
-      <ShareUrlSection shareUrl={shareUrl} />
+      <QuickActions shareUrl={shareUrl} />
     </>
   );
 }
