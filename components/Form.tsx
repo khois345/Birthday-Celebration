@@ -11,6 +11,7 @@ const Form = () => {
   const [userAge, setUserAge] = useState<number>(0);
   const [userRegard, setUserRegard] = useState<string>("");
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Functions for handling the form data and user interaction--------------------------------------------
   // Age validation
@@ -57,6 +58,10 @@ const Form = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    if (isSubmitting) {
+      return;
+    }
+
     if (userAge === 0) {
       toast.warning("Please enter a valid age", { position: "top-center"});
       return;
@@ -66,20 +71,37 @@ const Form = () => {
     }
 
     // Save user data to database
-    const newSessionId = await saveUserData({
-      name: username,
-      age: userAge,
-      regard: userRegard || regard,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const newSessionId = await saveUserData({
+        name: username,
+        age: userAge,
+        regard: userRegard || regard,
+      });
+
+      if (newSessionId === "RATE_LIMIT") {
+        toast.error("You have reached the daily session limit (5 requests). Please try again tomorrow.", {
+          position: "top-center",
+        });
+        return;
+      }
     
-    if (!newSessionId) {
+      if (!newSessionId) {
+        toast.error("Could not save birthday celebration", {
+          position: "top-center",
+        });
+        return;
+      }
+
+      router.push(`/${newSessionId}`);
+    } catch {
       toast.error("Could not save birthday celebration", {
         position: "top-center",
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    router.push(`/${newSessionId}`);
   };
   //------------------------------------------------------------------------------------------------------------
 
@@ -190,8 +212,19 @@ const Form = () => {
             />
           </div>
           <div className="flex justify-center mt-5"> {/* Centering the submit button */}
-            <button type="submit" className="bg-neutral-800 hover:bg-orange-800 text-white font-bold py-2 px-10 rounded-full">
-              Submit
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 bg-neutral-800 hover:bg-orange-800 disabled:cursor-not-allowed disabled:opacity-80 text-white font-bold py-2 px-10 rounded-full min-w-36"
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" aria-hidden="true" />
+                  Saving...
+                </>
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </form>

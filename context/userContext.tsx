@@ -13,7 +13,7 @@ interface UserContext {
         name: string;
         age: number;
         regard: string;
-    }) => Promise<string | null>;
+    }) => Promise<string | "RATE_LIMIT" | null>;
     loadUserData: (sessionId: string) => Promise<boolean>;
 }
 
@@ -53,6 +53,10 @@ const UserProvider = (props: any) => {
                     regard: userData.regard,
                 }),
             });
+
+            if (response.status === 429) {
+                return "RATE_LIMIT";
+            }
 
             if (!response.ok) {
                 console.error("Failed to save user data:", response.statusText);
