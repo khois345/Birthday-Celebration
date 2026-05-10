@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/context/userContext";
 import { toast } from "react-toastify";
 import { usePathname, useRouter } from "next/navigation";
 import { Locale, getLocalePrefix, getTranslations } from "@/i18n/translations";
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 interface FormProps {
   locale: Locale;
@@ -16,6 +18,10 @@ const Form = ({ locale }: FormProps) => {
   const [username, setUsername] = useState<string>("");
   const [userAge, setUserAge] = useState<number>(0);
   const [userRegard, setUserRegard] = useState<string>("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const regardRef = useRef<HTMLTextAreaElement | null>(null);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+  const emojiButtonRef = useRef<HTMLButtonElement | null>(null);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const texts = getTranslations(locale);
@@ -113,9 +119,39 @@ const Form = ({ locale }: FormProps) => {
   };
   //------------------------------------------------------------------------------------------------------------
 
+  useEffect(() => {
+    if (!showEmojiPicker) return;
+
+    const handleOutside = (e: Event) => {
+      const target = e.target as Node;
+      if (
+        (regardRef.current && regardRef.current.contains(target)) ||
+        (pickerRef.current && pickerRef.current.contains(target)) ||
+        (emojiButtonRef.current && emojiButtonRef.current.contains(target))
+      ) {
+        return;
+      }
+      setShowEmojiPicker(false);
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowEmojiPicker(false);
+    };
+
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+    document.addEventListener("keydown", handleKey);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [showEmojiPicker]);
+
   return (
     <div className="flex justify-center pt-8">
-      <div className="w-full max-w-xs"> {/* Goes with the form */}
+      <div className="w-full max-w-xs">
         <form
           onSubmit={handleSubmit}
           className="text-neutral-300 pl-5 pr-5 pt-8 pb-8 mb-4 rounded-lg shadow-full bg-neutral-700"
@@ -210,16 +246,60 @@ const Form = ({ locale }: FormProps) => {
             <label className="block text-md font-bold mb-2">
               {texts.form.regardLabel}
             </label>
-            <textarea
-              value={userRegard}
-              onChange={(e) => setUserRegard(e.target.value)}
-              maxLength={100}
-              placeholder={texts.form.regardPlaceholder}
-              rows={3}
-              className="shadow appearance-none rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+            <div className="relative">
+              <textarea
+                ref={regardRef}
+                value={userRegard}
+                onChange={(e) => setUserRegard(e.target.value)}
+                maxLength={100}
+                placeholder={texts.form.regardPlaceholder}
+                rows={3}
+                className="shadow appearance-none rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+
+              <button
+                ref={emojiButtonRef}
+                type="button"
+                aria-label="Add emoji"
+                onClick={() => setShowEmojiPicker((s) => !s)}
+                className="absolute right-2 bottom-2 bg-neutral-600 hover:bg-neutral-500 text-white rounded-full p-2"
+              >
+                <span aria-hidden>😊</span>
+              </button>
+
+              {/* Emoji picker */}
+              {showEmojiPicker && (
+                <div ref={pickerRef} className="absolute z-50 right-0 bottom-12">
+                  <Picker
+                    data={data}
+                    onEmojiSelect={(emoji: any) => {
+                      const native = emoji?.native || emoji?.colons || '';
+                      // Insert at cursor position if possible
+                      const textarea = regardRef.current;
+                      if (textarea) {
+                        const start = textarea.selectionStart || 0;
+                        const end = textarea.selectionEnd || 0;
+                        const newValue = userRegard.slice(0, start) + native + userRegard.slice(end);
+                        setUserRegard(newValue);
+                        // put caret after inserted emoji
+                        requestAnimationFrame(() => {
+                          textarea.focus();
+                          const pos = start + native.length;
+                          textarea.setSelectionRange(pos, pos);
+                        });
+                      } else {
+                        setUserRegard((prev) => prev + native);
+                      }
+                      // close picker after selection
+                      setShowEmojiPicker(false);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex justify-center mt-5"> {/* Centering the submit button */}
+          {/* Submit button */}
+          <div className="flex justify-center mt-5">
             <button
               type="submit"
               disabled={isSubmitting}

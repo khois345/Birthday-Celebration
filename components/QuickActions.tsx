@@ -30,18 +30,28 @@ export default function QuickActions({ shareUrl, onSwitchColors, locale }: Celeb
           <button
             type="button"
             onClick={onSwitchColors}
-            className="inline-flex w-[85%] items-center justify-center gap-2 bg-neutral-100 hover:bg-neutral-200 text-black font-bold py-2 px-5 rounded-md"
+            className="inline-flex w-[90%] items-center justify-center gap-2 bg-neutral-100 hover:bg-neutral-200 text-black font-bold py-2 px-5 rounded-md"
           >
             {texts.actions.switchColor}
           </button>
           <button
             type="button"
+            onClick={() => window.location.reload()}
+            aria-label="Refresh page"
+            className="group inline-flex w-[5%] items-center justify-center gap-2 bg-neutral-400 hover:bg-neutral-300 active:bg-neutral-300 text-black font-bold py-2 px-5 rounded-2xl transition-colors"
+          >
+            <span className="inline-flex h-6 w-4 items-center justify-center rounded-full bg-neutral-400 group-hover:bg-neutral-300 group-active:bg-neutral-300 transition-colors">
+              <i className="fa-solid fa-rotate-right" aria-hidden="true" />
+            </span>
+          </button>
+          <button
+            type="button"
             onClick={() => router.push(getHomePath())}
             aria-label={texts.actions.backToHome}
-            className="inline-flex w-[15%] items-center justify-center gap-2 bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-5 rounded-2xl"
+            className="group inline-flex w-[5%] items-center justify-center gap-2 bg-neutral-400 hover:bg-neutral-300 active:bg-neutral-300 text-black font-bold py-2 px-5 rounded-2xl transition-colors"
           >
-            <span className="inline-flex h-6 w-4 items-center justify-center rounded-full bg-neutral-400">
-              <i className="fa-solid fa-arrow-rotate-left" aria-hidden="true" />
+            <span className="inline-flex h-6 w-4 items-center justify-center rounded-full bg-neutral-400 group-hover:bg-neutral-300 group-active:bg-neutral-300 transition-colors">
+              <i className="fa-solid fa-arrow-left" aria-hidden="true" />
             </span>
           </button>
         </div>

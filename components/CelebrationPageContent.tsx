@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BirthdayCake from "@/components/BirthdayCake";
-import { CakeColors, getRandomCakeColors } from "@/components/cakePalettes";
+import { CakeColors, cakePalettes, getRandomCakeColors } from "@/components/cakePalettes";
 import QuickActions from "@/components/QuickActions";
 import { useUser } from "@/context/userContext";
 import { Locale, getLocalePrefix, getTranslations } from "@/i18n/translations";
@@ -18,7 +18,7 @@ export default function CelebrationPageContent({ sessionId, locale }: Celebratio
   const router = useRouter();
   const { name, regard, loadUserData } = useUser();
   const [shareUrl, setShareUrl] = useState("");
-  const [cakeColors, setCakeColors] = useState<CakeColors>(() => getRandomCakeColors());
+  const [cakeColors, setCakeColors] = useState<CakeColors>(() => cakePalettes[0]);
   const texts = getTranslations(locale);
 
   useEffect(() => {
@@ -31,6 +31,10 @@ export default function CelebrationPageContent({ sessionId, locale }: Celebratio
   useEffect(() => {
     (window as unknown as { __cakeColors?: CakeColors }).__cakeColors = cakeColors;
   }, [cakeColors]);
+
+  useEffect(() => {
+    setCakeColors(getRandomCakeColors());
+  }, []);
 
   useEffect(() => {
     if (sessionId) {
