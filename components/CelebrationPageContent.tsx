@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BirthdayCake from "@/components/BirthdayCake";
+import { CakeColors, getRandomCakeColors } from "@/components/cakePalettes";
 import QuickActions from "@/components/QuickActions";
 import { useUser } from "@/context/userContext";
 
@@ -15,12 +16,17 @@ export default function CelebrationPageContent({ sessionId }: CelebrationPageCon
   const router = useRouter();
   const { name, regard, loadUserData } = useUser();
   const [shareUrl, setShareUrl] = useState("");
+  const [cakeColors, setCakeColors] = useState<CakeColors>(() => getRandomCakeColors());
 
   useEffect(() => {
     if (typeof window !== "undefined" && sessionId) {
       setShareUrl(`${window.location.origin}/${sessionId}`);
     }
   }, [sessionId]);
+
+  useEffect(() => {
+    (window as unknown as { __cakeColors?: CakeColors }).__cakeColors = cakeColors;
+  }, [cakeColors]);
 
   useEffect(() => {
     if (sessionId) {
@@ -32,6 +38,16 @@ export default function CelebrationPageContent({ sessionId }: CelebrationPageCon
       });
     }
   }, [sessionId, loadUserData, router]);
+
+  const handleSwitchColors = () => {
+    let nextColors = getRandomCakeColors();
+
+    while (nextColors.top === cakeColors.top) {
+      nextColors = getRandomCakeColors();
+    }
+
+    setCakeColors(nextColors);
+  };
 
   return (
     <>
@@ -48,8 +64,8 @@ export default function CelebrationPageContent({ sessionId }: CelebrationPageCon
           <p className="text-lg mb-4 whitespace-normal font-light break-words text-gray-300">{regard}</p>
         </div>
       </div>
-      <BirthdayCake />
-      <QuickActions shareUrl={shareUrl} />
+      <BirthdayCake cakeColors={cakeColors} />
+      <QuickActions shareUrl={shareUrl} onSwitchColors={handleSwitchColors} />
     </>
   );
 }

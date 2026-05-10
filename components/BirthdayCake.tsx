@@ -8,6 +8,7 @@ import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange } from "@/utils/utilFunctions";
+import { CakeColors } from "./cakePalettes";
 
 const DEBUG = true;
 
@@ -17,7 +18,61 @@ interface CandlePosition {
   isLit: boolean;
 }
 
-const BirthdayCake = () => {
+// palette data in components/cakePalettes.ts
+function hexToRgb(hex: string) {
+  const normalizedHex = hex.replace("#", "");
+  const value = normalizedHex.length === 3
+    ? normalizedHex.split("").map((character) => character + character).join("")
+    : normalizedHex;
+
+  const numericValue = Number.parseInt(value, 16);
+
+  return {
+    red: (numericValue >> 16) & 255,
+    green: (numericValue >> 8) & 255,
+    blue: numericValue & 255,
+  };
+}
+
+function mixColor(hex: string, mixWith: string, amount: number) {
+  const base = hexToRgb(hex);
+  const mix = hexToRgb(mixWith);
+
+  const red = Math.round(base.red + (mix.red - base.red) * amount);
+  const green = Math.round(base.green + (mix.green - base.green) * amount);
+  const blue = Math.round(base.blue + (mix.blue - base.blue) * amount);
+
+  return `rgb(${red}, ${green}, ${blue})`;
+}
+
+function buildLayerStyle(color: string) {
+  return {
+    backgroundColor: color,
+    boxShadow: [
+      `0 2px 0px ${mixColor(color, "#ffffff", 0.18)}`,
+      `0 4px 0px ${mixColor(color, "#000000", 0.08)}`,
+      `0 6px 0px ${mixColor(color, "#000000", 0.09)}`,
+      `0 8px 0px ${mixColor(color, "#000000", 0.1)}`,
+      `0 10px 0px ${mixColor(color, "#000000", 0.11)}`,
+      `0 12px 0px ${mixColor(color, "#000000", 0.12)}`,
+      `0 14px 0px ${mixColor(color, "#000000", 0.13)}`,
+      `0 16px 0px ${mixColor(color, "#000000", 0.14)}`,
+      `0 18px 0px ${mixColor(color, "#000000", 0.15)}`,
+      `0 20px 0px ${mixColor(color, "#000000", 0.16)}`,
+      `0 22px 0px ${mixColor(color, "#000000", 0.17)}`,
+      `0 24px 0px ${mixColor(color, "#000000", 0.18)}`,
+      `0 26px 0px ${mixColor(color, "#000000", 0.19)}`,
+      `0 28px 0px ${mixColor(color, "#000000", 0.2)}`,
+      `0 30px 0px ${mixColor(color, "#000000", 0.21)}`,
+    ].join(", "),
+  };
+}
+
+interface BirthdayCakeProps {
+  cakeColors: CakeColors;
+}
+
+const BirthdayCake = ({ cakeColors }: BirthdayCakeProps) => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
   const { microphoneVolume, averageVolume, isBlowing, stopMicrophone } = useMicrophone();
   const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
@@ -60,7 +115,7 @@ const BirthdayCake = () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           resolve();
-        }, 25);
+        }, 30);
       });
     }
 
@@ -114,13 +169,18 @@ const BirthdayCake = () => {
       <div className="flex justify-center">
         <div className="cake">
           <div className="plate"></div>
-          <div className="layer layer-bottom"></div>
-          <div className="layer layer-middle"></div>
-          <div className="layer layer-top"></div>
-          <div className="icing"></div>
-          <div className="drip drip1"></div>
-          <div className="drip drip2"></div>
-          <div className="drip drip3"></div>
+          <div className="layer layer-bottom" style={buildLayerStyle(cakeColors.bottom)}></div>
+          <div className="layer layer-middle" style={buildLayerStyle(cakeColors.middle)}></div>
+          <div className="layer layer-top" style={buildLayerStyle(cakeColors.top)}></div>
+          <div
+            className="icing"
+            style={{
+              backgroundColor: cakeColors.icing,
+            }}
+          ></div>
+          <div className="drip drip1" style={{ backgroundColor: cakeColors.drip1 }}></div>
+          <div className="drip drip2" style={{ backgroundColor: cakeColors.drip2 }}></div>
+          <div className="drip drip3" style={{ backgroundColor: cakeColors.drip3 }}></div>
 
           {/* Add candles to the cake
               Note: we want to use slide() to create a temporary copy and reverse its order
@@ -143,6 +203,7 @@ const BirthdayCake = () => {
                 style={{
                   left: `${candlePosition.x}px`,
                   top: `${candlePosition.y}px`,
+                  backgroundColor: cakeColors.candle,
                 }}
                 // Keep track of rendered candles to prevent blowing candles during rendering
                 onAnimationComplete={() => setRenderedCandlesCount((prevCount) => prevCount + 1)}
@@ -154,6 +215,9 @@ const BirthdayCake = () => {
                     exit={{ opacity: 0 }}
                     // Flame fade duration scales with age: younger = faster, older = slower
                     transition={{ duration: Math.max(0.15, Math.min(0.8, 0.15 + age * 0.01)) }}
+                    style={{
+                      backgroundColor: cakeColors.flame,
+                    }}
                   />
                 )}
 

@@ -56,17 +56,23 @@ $chocolate: #553c13;
     width: 250px;
     height: 100px;
     border-radius: 50%;
-    @include foodColoring($chocolate);
 }
 
-.layer-top { top: 0px; }
-.layer-middle { top: 33px; }
-.layer-bottom { top: 66px; }
+.layer-top {
+    top: 0px;
+}
+
+.layer-middle {
+    top: 33px;
+}
+
+.layer-bottom {
+    top: 66px;
+}
 
 .icing {
     top: 2px;
     left: 5px;
-    background-color: $vanilla;
     width: 240px;
     height: 90px;
     border-radius: 50%;
@@ -77,11 +83,11 @@ $chocolate: #553c13;
         right: 5px;
         bottom: 6px;
         left: 5px;
-        background-color: lighten($vanilla, 3%);
+        background-color: inherit;
         box-shadow:
-            0 0 4px lighten($vanilla, 5%),
-            0 0 4px lighten($vanilla, 5%),
-            0 0 4px lighten($vanilla, 5%);
+            0 0 4px rgba(255, 255, 255, 0.22),
+            0 0 4px rgba(255, 255, 255, 0.22),
+            0 0 4px rgba(255, 255, 255, 0.22);
         border-radius: 50%;
         z-index: 1;
     }
@@ -93,7 +99,6 @@ $chocolate: #553c13;
     height: 60px;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
-    background-color: $vanilla;
 }
 
 .drip1 {
@@ -119,7 +124,6 @@ $chocolate: #553c13;
 }
 
 .candle {
-    background-color: #7B020B;
     width: 16px;
     height: 50px;
     border-radius: 8px / 4px;
@@ -134,7 +138,7 @@ $chocolate: #553c13;
         width: 16px;
         height: 4px;
         border-radius: 50%;
-        background-color: lighten(#7B020B, 10%);
+        background-color: inherit;
     }
 }
 
@@ -151,7 +155,6 @@ $chocolate: #553c13;
 
 .flame {
     position: absolute;
-    background-color: orange;
     width: 15px;
     height: 25px;
     border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px;
@@ -160,10 +163,10 @@ $chocolate: #553c13;
     margin-left: -7.5px;
     z-index: 10;
     box-shadow:
-        0 0 5px rgba(orange, 0.5),
-        0 0 10px rgba(orange, 0.5),
-        0 0 20px rgba(orange, 0.5),
-        0 0 35px rgba(orange, 0.5);
+        0 0 5px rgba(255, 165, 0, 0.5),
+        0 0 10px rgba(255, 165, 0, 0.5),
+        0 0 20px rgba(255, 165, 0, 0.5),
+        0 0 35px rgba(255, 165, 0, 0.5);
     transform-origin: 50% 90%;
     animation: flicker 2.5s ease-in-out alternate infinite;
 }
@@ -172,36 +175,36 @@ $chocolate: #553c13;
     0% {
         transform: skewX(5deg);
         box-shadow: 
-            0 0 5px rgba(orange, 0.2),
-            0 0 10px rgba(orange, 0.2),
-            0 0 20px rgba(orange, 0.2),
-            0 0 35px rgba(orange, 0.2), }
+            0 0 5px rgba(255, 165, 0, 0.2),
+            0 0 10px rgba(255, 165, 0, 0.2),
+            0 0 20px rgba(255, 165, 0, 0.2),
+            0 0 35px rgba(255, 165, 0, 0.2), }
     25% {
         transform: skewX(-5deg);
         box-shadow:
-            0 0 5px rgba(orange, 0.5),
-            0 0 10px rgba(orange, 0.5),
-            0 0 20px rgba(orange, 0.5),
-            0 0 35px rgba(orange, 0.5), }
+            0 0 5px rgba(255, 165, 0, 0.5),
+            0 0 10px rgba(255, 165, 0, 0.5),
+            0 0 20px rgba(255, 165, 0, 0.5),
+            0 0 35px rgba(255, 165, 0, 0.5), }
     50% {
         transform: skewX(10deg);
         box-shadow:
-            0 0 5px rgba(orange, 0.3),
-            0 0 10px rgba(orange, 0.3),
-            0 0 20px rgba(orange, 0.3),
-            0 0 35px rgba(orange, 0.3), }
+            0 0 5px rgba(255, 165, 0, 0.3),
+            0 0 10px rgba(255, 165, 0, 0.3),
+            0 0 20px rgba(255, 165, 0, 0.3),
+            0 0 35px rgba(255, 165, 0, 0.3), }
     75% {
         transform: skewX(-10deg);
         box-shadow:
-            0 0 5px rgba(orange, 0.4),
-            0 0 10px rgba(orange, 0.4),
-            0 0 20px rgba(orange, 0.4),
-            0 0 35px rgba(orange, 0.4), }
+            0 0 5px rgba(255, 165, 0, 0.4),
+            0 0 10px rgba(255, 165, 0, 0.4),
+            0 0 20px rgba(255, 165, 0, 0.4),
+            0 0 35px rgba(255, 165, 0, 0.4), }
     100% {
         transform: skewX(5deg);
         box-shadow:
-            0 0 5px rgba(orange, 0.5),
-            0 0 10px rgba(orange, 0.5),
-            0 0 20px rgba(orange, 0.5),
-            0 0 35px rgba(orange, 0.5) }
+            0 0 5px rgba(255, 165, 0, 0.5),
+            0 0 10px rgba(255, 165, 0, 0.5),
+            0 0 20px rgba(255, 165, 0, 0.5),
+            0 0 35px rgba(255, 165, 0, 0.5) }
 }
