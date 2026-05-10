@@ -14,7 +14,7 @@ interface UserContext {
         age: number;
         regard: string;
     }) => Promise<string | null>;
-    loadUserData: (sessionId: string) => Promise<void>;
+    loadUserData: (sessionId: string) => Promise<boolean>;
 }
 
 const UserContext = createContext<UserContext>({
@@ -25,7 +25,7 @@ const UserContext = createContext<UserContext>({
     setAge: () => {},
     setRegard: () => {},
     saveUserData: async () => null,
-    loadUserData: async () => {},
+    loadUserData: async () => false,
 });
 
 const UserProvider = (props: any) => {
@@ -67,7 +67,7 @@ const UserProvider = (props: any) => {
         }
     };
 
-    const loadUserData = async (sessionId: string) => {
+    const loadUserData = async (sessionId: string): Promise<boolean> => {
         try {
             const response = await fetch(`/api/birthday-session?sessionId=${sessionId}`);
             const data = await response.json();
@@ -77,11 +77,14 @@ const UserProvider = (props: any) => {
                 setAge(data.user.age);
                 setRegard(data.user.regard);
                 console.log("User data loaded from session:", data.user);
+                return true;
             } else {
                 console.log("No user data found for this session");
+                return false;
             }
         } catch (error) {
             console.error("Error loading user data:", error);
+            return false;
         }
     };
 

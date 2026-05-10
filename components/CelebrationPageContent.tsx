@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import BirthdayCake from "@/components/BirthdayCake";
+import ShareUrlSection from "@/components/ShareUrlSection";
 import { useUser } from "@/context/userContext";
 
 interface CelebrationPageContentProps {
@@ -9,13 +12,26 @@ interface CelebrationPageContentProps {
 }
 
 export default function CelebrationPageContent({ sessionId }: CelebrationPageContentProps) {
+  const router = useRouter();
   const { name, regard, loadUserData } = useUser();
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionId) {
+      setShareUrl(`${window.location.origin}/${sessionId}`);
+    }
+  }, [sessionId]);
 
   useEffect(() => {
     if (sessionId) {
-      loadUserData(sessionId);
+      loadUserData(sessionId).then((success) => {
+        if (!success) {
+          toast.error("Session not found or has expired. Please check the link or create a new session.");
+          router.push("/");
+        }
+      });
     }
-  }, [sessionId, loadUserData]);
+  }, [sessionId, loadUserData, router]);
 
   return (
     <>
@@ -33,6 +49,7 @@ export default function CelebrationPageContent({ sessionId }: CelebrationPageCon
         </div>
       </div>
       <BirthdayCake />
+      <ShareUrlSection shareUrl={shareUrl} />
     </>
   );
 }
