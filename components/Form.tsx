@@ -2,16 +2,23 @@
 import { useState } from "react";
 import { useUser } from "@/context/userContext";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Locale, getLocalePrefix, getTranslations } from "@/i18n/translations";
 
-const Form = () => {
+interface FormProps {
+  locale: Locale;
+}
+
+const Form = ({ locale }: FormProps) => {
   const router = useRouter();
-  const { regard, saveUserData } = useUser();
+  const pathname = usePathname();
+  const { saveUserData } = useUser();
   const [username, setUsername] = useState<string>("");
   const [userAge, setUserAge] = useState<number>(0);
   const [userRegard, setUserRegard] = useState<string>("");
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const texts = getTranslations(locale);
 
   // Functions for handling the form data and user interaction--------------------------------------------
   // Age validation
@@ -63,10 +70,10 @@ const Form = () => {
     }
 
     if (userAge === 0) {
-      toast.warning("Please enter a valid age", { position: "top-center"});
+      toast.warning(texts.form.validationAge, { position: "top-center"});
       return;
     } else if (username === "") {
-      toast.warning("Please enter a name", { position: "top-center"});
+      toast.warning(texts.form.validationName, { position: "top-center"});
       return;
     }
 
@@ -77,26 +84,27 @@ const Form = () => {
       const newSessionId = await saveUserData({
         name: username,
         age: userAge,
-        regard: userRegard || regard,
+        regard: userRegard || texts.form.defaultRegard,
       });
 
       if (newSessionId === "RATE_LIMIT") {
-        toast.error("You have reached the daily session limit (5 requests). Please try again tomorrow.", {
+        toast.error(texts.form.rateLimit, {
           position: "top-center",
         });
         return;
       }
     
       if (!newSessionId) {
-        toast.error("Could not save birthday celebration", {
+        toast.error(texts.form.saveError, {
           position: "top-center",
         });
         return;
       }
 
-      router.push(`/${newSessionId}`);
+      const localePrefix = getLocalePrefix(pathname);
+      router.push(`${localePrefix}/${newSessionId}`);
     } catch {
-      toast.error("Could not save birthday celebration", {
+      toast.error(texts.form.saveError, {
         position: "top-center",
       });
     } finally {
@@ -112,12 +120,12 @@ const Form = () => {
           onSubmit={handleSubmit}
           className="text-neutral-300 pl-5 pr-5 pt-8 pb-8 mb-4 rounded-lg shadow-full bg-neutral-700"
         >
-          <h2 className="text-lg font-bold mb-2 text-center">Enter the details of the birthday person</h2>
+          <h2 className="text-lg font-bold mb-2 text-center">{texts.form.title}</h2>
           
           {/* Name session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
-              Enter name
+              {texts.form.nameLabel}
             </label>
             <input
               type="text"
@@ -131,7 +139,7 @@ const Form = () => {
           {/* Age session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
-              Enter age
+              {texts.form.ageLabel}
             </label>
             <div className="relative flex items-center ">
               <button
@@ -200,13 +208,13 @@ const Form = () => {
           {/* Regards session */}
           <div className="mb-2">
             <label className="block text-md font-bold mb-2">
-              Enter birthday regard (optional)
+              {texts.form.regardLabel}
             </label>
             <textarea
               value={userRegard}
               onChange={(e) => setUserRegard(e.target.value)}
               maxLength={100}
-              placeholder="Max 100 characters"
+              placeholder={texts.form.regardPlaceholder}
               rows={3}
               className="shadow appearance-none rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
@@ -220,10 +228,10 @@ const Form = () => {
               {isSubmitting ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" aria-hidden="true" />
-                  Saving...
+                  {texts.form.saving}
                 </>
               ) : (
-                "Submit"
+                texts.form.submit
               )}
             </button>
           </div>

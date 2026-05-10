@@ -9,6 +9,7 @@ import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange } from "@/utils/utilFunctions";
 import { CakeColors } from "./cakePalettes";
+import { Locale, getTranslations } from "@/i18n/translations";
 
 const DEBUG = true;
 
@@ -70,11 +71,13 @@ function buildLayerStyle(color: string) {
 
 interface BirthdayCakeProps {
   cakeColors: CakeColors;
+  locale: Locale;
 }
 
-const BirthdayCake = ({ cakeColors }: BirthdayCakeProps) => {
+const BirthdayCake = ({ cakeColors, locale }: BirthdayCakeProps) => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
-  const { microphoneVolume, averageVolume, isBlowing, stopMicrophone } = useMicrophone();
+  const texts = getTranslations(locale);
+  const { microphoneVolume, averageVolume, isBlowing, stopMicrophone } = useMicrophone(texts.cake.microphoneDenied);
   const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
 
   // Get the age from the user context
@@ -233,7 +236,7 @@ const BirthdayCake = ({ cakeColors }: BirthdayCakeProps) => {
           onClick={() => blowOutAllCandles()}
           className="bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-6 rounded-full"
         >
-          Click to Blow Candles
+            {texts.cake.blowCandles}
         </button>
       </div>
     </>

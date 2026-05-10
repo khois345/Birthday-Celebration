@@ -1,6 +1,6 @@
 import CelebrationPageContent from "@/components/CelebrationPageContent";
-import PageFooter from "@/components/PageFooter";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PageFooter from "@/components/PageFooter";
 
 interface PageProps {
   params: Promise<{
@@ -8,7 +8,7 @@ interface PageProps {
   }>;
 }
 
-export default async function BirthdaySessionPage({ params }: PageProps) {
+export default async function EnglishBirthdaySessionPage({ params }: PageProps) {
   const { sessionId } = await params;
 
   return (

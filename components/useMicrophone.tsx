@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { isMobile } from "react-device-detect";
 
-const useMicrophone = () => {
+const useMicrophone = (microphoneDeniedMessage: string) => {
   const [microphoneVolume, setMicrophoneVolume] = useState<number>(0);
   const [averageVolume, setAverageVolume] = useState<number>(0);
   const [isBlowing, setIsBlowing] = useState<boolean>(false);
@@ -59,7 +59,7 @@ const useMicrophone = () => {
       processMicrophoneData();
     } catch (error) {
       console.error("Error accessing microphone:", error);
-      toast.error("Please allow microphone access for the full experience");
+      toast.error(microphoneDeniedMessage);
     }
   };
 
