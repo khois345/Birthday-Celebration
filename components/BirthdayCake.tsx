@@ -9,7 +9,7 @@ import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange } from "@/utils/utilFunctions";
 
-const DEBUG = true;
+const DEBUG = false;
 
 interface CandlePosition {
   x: number;
@@ -118,7 +118,7 @@ const BirthdayCake = () => {
     if (isBlowing) {
       blowOutCandles();
     }
-  }, [isBlowing]); // Trigger the effect when isBlowing changes
+  }, [isBlowing, blowOutCandles]); // Trigger the effect when isBlowing or blowOutCandles changes
 
   return (
     // Display the cake and candles on the screen using CSS classes
