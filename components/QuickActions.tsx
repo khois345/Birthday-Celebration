@@ -17,7 +17,8 @@ export default function QuickActions({ shareUrl, onSwitchColors, locale }: Celeb
 
   const getHomePath = () => {
     const localePrefix = getLocalePrefix(pathname);
-    return localePrefix || `/${locale}`;
+    // If localePrefix is empty (english version), return "/". Otherwise, we return the locale-specific path.
+    return localePrefix ? `/${locale}` : "/";
   };
 
   return (
