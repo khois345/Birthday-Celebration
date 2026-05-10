@@ -11,7 +11,7 @@ import { randomNumberInRange } from "@/utils/utilFunctions";
 import { CakeColors } from "./cakePalettes";
 import { Locale, getTranslations } from "@/i18n/translations";
 
-const DEBUG = true;
+const DEBUG = false;
 
 interface CandlePosition {
   x: number;
