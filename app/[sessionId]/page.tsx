@@ -1,4 +1,3 @@
-// app/[sessionId]/page.tsx
 import CelebrationPageContent from "@/components/CelebrationPageContent";
 
 interface PageProps {

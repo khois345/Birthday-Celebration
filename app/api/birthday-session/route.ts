@@ -1,4 +1,3 @@
-// app/api/birthday-session/route.ts
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
@@ -7,12 +6,43 @@ import clientPromise from "@/lib/mongodb";
 const DB_NAME = "birthday-app";
 const COLLECTION_NAME = "birthday_sessions";
 const DEFAULT_REGARD = "Wish you a wonderful birthday!";
+const MAX_SESSIONS_PER_DAY = 5;
+const SESSION_EXPIRY_DAYS = 3;
 
 function getExpiryDate() {
   const expiresAt = new Date();
-  const days = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5 days
-  expiresAt.setDate(expiresAt.getDate() + days);
+  expiresAt.setDate(expiresAt.getDate() + SESSION_EXPIRY_DAYS);
   return expiresAt;
+}
+
+function getDeviceId(request: Request): string {
+  // Get client IP address from headers (works with proxies/load balancers)
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  // Get user agent
+  const userAgent = request.headers.get("user-agent") || "unknown";
+
+  // Create identifier from IP + User-Agent
+  return `${ip}:${userAgent}`;
+}
+
+async function checkDailySessionLimit(
+  db: any,
+  deviceId: string
+): Promise<boolean> {
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  const sessionCount = await db
+    .collection(COLLECTION_NAME)
+    .countDocuments({
+      deviceId,
+      createdAt: { $gte: oneDayAgo },
+    });
+
+  return sessionCount < MAX_SESSIONS_PER_DAY;
 }
 
 export async function GET(request: Request) {
@@ -71,35 +101,46 @@ export async function POST(request: Request) {
   }
 
   const cookieStore = await cookies();
+  let deviceId = cookieStore.get("birthday_device_id")?.value;
 
-  let sessionId = cookieStore.get("birthday_session")?.value;
-
-  if (!sessionId) {
-    sessionId = randomUUID();
+  // Fallback: generate deviceId from request headers if no cookie exists
+  if (!deviceId) {
+    deviceId = getDeviceId(request);
   }
-
-  const expiresAt = getExpiryDate();
 
   const client = await clientPromise;
   const db = client.db(DB_NAME);
 
-  await db.collection(COLLECTION_NAME).updateOne(
-    { sessionId },
-    {
-      $set: {
-        sessionId,
-        name,
-        age,
-        regard,
-        expiresAt,
-        updatedAt: new Date(),
-      },
-      $setOnInsert: {
-        createdAt: new Date(),
-      },
-    },
-    { upsert: true }
+  // Check if device has exceeded daily session limit
+  const canCreateSession = await checkDailySessionLimit(
+    db,
+    deviceId
   );
+
+  if (!canCreateSession) {
+    return NextResponse.json(
+      {
+        error:
+          "Daily session limit (5 per day) reached. Try again tomorrow.",
+      },
+      { status: 429 }
+    );
+  }
+
+  // Always generate a new sessionId
+  const sessionId = randomUUID();
+  const expiresAt = getExpiryDate();
+
+  await db.collection(COLLECTION_NAME).insertOne({
+    sessionId,
+    deviceId,
+    name,
+    age,
+    regard,
+    expiresAt,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
 
   const response = NextResponse.json({
     user: {
@@ -110,12 +151,13 @@ export async function POST(request: Request) {
     },
   });
 
-  response.cookies.set("birthday_session", sessionId, {
+  // Set/refresh cookie with 1 year expiry
+  response.cookies.set("birthday_device_id", deviceId, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    expires: expiresAt,
+    maxAge: 365 * 24 * 60 * 60, // 1 year
   });
 
   return response;

@@ -32,7 +32,6 @@ const UserProvider = (props: any) => {
     const [name, setName] = useState("");
     const [age, setAge] = useState(0);
     const [regard, setRegard] = useState<string>("Wish you a wonderful birthday!");
-    const [sessionId, setSessionId] = useState("");
 
     useEffect(() => {
         const savedRegard = localStorage.getItem("regard");
@@ -61,7 +60,6 @@ const UserProvider = (props: any) => {
             }
 
             const result = await response.json();
-            setSessionId(result.user.sessionId);
             return result.user.sessionId;
         } catch (error) {
             console.error("Error saving user data:", error);
@@ -104,7 +102,6 @@ const UserProvider = (props: any) => {
         setAge,
         regard,
         setRegard,
-        setSessionId,
         saveUserData,
         loadUserData
     };
