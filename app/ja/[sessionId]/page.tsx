@@ -8,14 +8,14 @@ interface PageProps {
   }>;
 }
 
-export default async function EnglishBirthdaySessionPage({ params }: PageProps) {
+export default async function JapaneseBirthdaySessionPage({ params }: PageProps) {
   const { sessionId } = await params;
 
   return (
     <>
-      <LanguageSwitcher locale="en" />
-      <CelebrationPageContent sessionId={sessionId} locale="en" />
-      <PageFooter locale="en" />
+      <LanguageSwitcher locale="ja" />
+      <CelebrationPageContent sessionId={sessionId} locale="ja" />
+      <PageFooter locale="ja" />
     </>
   );
 }

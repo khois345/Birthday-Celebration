@@ -1,37 +1,35 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Locale, getTranslations } from "@/i18n/translations";
+import { usePathname, useRouter } from "next/navigation";
+import { Locale, getTranslations, supportedLocales } from "@/i18n/translations";
 
 function stripLocalePrefix(pathname: string) {
-  if (pathname === "/en") {
-    return "/";
+  const normalizedPathname = pathname.toLowerCase();
+
+  for (const candidate of supportedLocales) {
+    const prefix = `/${candidate}`;
+
+    if (normalizedPathname === prefix) {
+      return "/";
+    }
+
+    if (normalizedPathname.startsWith(`${prefix}/`)) {
+      return pathname.slice(prefix.length);
+    }
   }
 
-  if (pathname.startsWith("/en/")) {
-    return pathname.slice(3);
-  }
-
-  if (pathname === "/vi") {
-    return "/";
-  }
-
-  if (pathname.startsWith("/vi/")) {
-    return pathname.slice(3);
-  }
-
-  return pathname;
+  return pathname || "/";
 }
 
 function getPathForLocale(pathname: string, locale: Locale) {
   const pathWithoutLocale = stripLocalePrefix(pathname);
-
+  
+  // English has no locale prefix (it's the default)
   if (locale === "en") {
-    return pathname.startsWith("/en") ? `/en${pathWithoutLocale === "/" ? "" : pathWithoutLocale}` : pathWithoutLocale;
+    return pathWithoutLocale === "/" ? "/" : pathWithoutLocale;
   }
-
-  return `/vi${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+  
+  return `/${locale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
 }
 
 interface LanguageSwitcherProps {
@@ -39,6 +37,7 @@ interface LanguageSwitcherProps {
 }
 
 export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
+  const router = useRouter();
   const pathname = usePathname();
   const language = getTranslations(locale).language;
 
@@ -46,26 +45,39 @@ export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
     document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; samesite=lax`;
   };
 
+  const localeLabels: Record<Locale, string> = {
+    en: language.english,
+    vi: language.vietnamese,
+    zh: language.chinese,
+    ko: language.korean,
+    ja: language.japanese,
+    es: language.spanish,
+    id: language.indonesian,
+    th: language.thai,
+  };
+
+  const handleLocaleChange = (nextLocale: Locale) => {
+    persistLocale(nextLocale);
+    router.push(getPathForLocale(pathname, nextLocale));
+  };
+
   return (
-    <div className="mx-auto mt-4 flex w-full max-w-md justify-end gap-2 px-4">
-      <Link
-        href={getPathForLocale(pathname, "en")}
-        onClick={() => persistLocale("en")}
-        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-          locale === "en" ? "bg-neutral-200 text-black" : "bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
-        }`}
+    <div className="mx-auto mt-4 flex w-full max-w-md justify-end px-4">
+      <label className="sr-only" htmlFor="language-selector">
+        Language
+      </label>
+      <select
+        id="language-selector"
+        value={locale}
+        onChange={(event) => handleLocaleChange(event.target.value as Locale)}
+        className="rounded-md border border-neutral-500 bg-neutral-700 px-3 py-1 text-sm font-semibold text-neutral-100 outline-none transition hover:bg-neutral-600 focus:ring-2 focus:ring-neutral-300"
       >
-        {language.english}
-      </Link>
-      <Link
-        href={getPathForLocale(pathname, "vi")}
-        onClick={() => persistLocale("vi")}
-        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-          locale === "vi" ? "bg-neutral-200 text-black" : "bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
-        }`}
-      >
-        {language.vietnamese}
-      </Link>
+        {supportedLocales.map((optionLocale) => (
+          <option key={optionLocale} value={optionLocale}>
+            {localeLabels[optionLocale]}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

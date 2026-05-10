@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import ShareUrlSection from "@/components/ShareUrlSection";
-import { Locale, getTranslations } from "@/i18n/translations";
+import { Locale, getLocalePrefix, getTranslations } from "@/i18n/translations";
 
 interface CelebrationActionsProps {
   shareUrl: string;
@@ -16,15 +16,8 @@ export default function QuickActions({ shareUrl, onSwitchColors, locale }: Celeb
   const texts = getTranslations(locale);
 
   const getHomePath = () => {
-    if (locale === "vi") {
-      return "/vi";
-    }
-
-    if (pathname === "/en" || pathname.startsWith("/en/")) {
-      return "/en";
-    }
-
-    return "/";
+    const localePrefix = getLocalePrefix(pathname);
+    return localePrefix || `/${locale}`;
   };
 
   return (
