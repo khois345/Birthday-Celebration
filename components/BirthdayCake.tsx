@@ -9,7 +9,7 @@ import { isMobile } from "react-device-detect";
 import { useUser } from "@/context/userContext";
 import { randomNumberInRange } from "@/utils/utilFunctions";
 
-const DEBUG = true;
+const DEBUG = false;
 
 interface CandlePosition {
   x: number;
@@ -21,9 +21,21 @@ const BirthdayCake = () => {
   const [candlePositions, setCandlePositions] = useState<CandlePosition[]>([]);
   const { microphoneVolume, averageVolume, isBlowing, stopMicrophone } = useMicrophone();
   const [renderedCandlesCount, setRenderedCandlesCount] = useState<number>(0);
+  const [shareUrl, setShareUrl] = useState<string>("");
 
   // Get the age from the user context
   const { age } = useUser();
+
+  // Get share URL from current location
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const currentSessionId = window.location.pathname.split("/").filter(Boolean).pop();
+
+      if (currentSessionId) {
+        setShareUrl(`${window.location.origin}/${currentSessionId}`);
+      }
+    }
+  }, []);
 
   if (DEBUG) {
     console.log("Volume:", microphoneVolume.toFixed(2), "Average:", averageVolume.toFixed(2), "Blowing:", isBlowing);
@@ -99,13 +111,14 @@ const BirthdayCake = () => {
     positions.sort((a, b) => b.y - a.y);
 
     setCandlePositions(positions);
-  }, []); // Render the candles only once when the component mounts
+    setRenderedCandlesCount(0);
+  }, [age]); // Render candles when the loaded age changes
 
   useEffect(() => {
     if (isBlowing) {
       blowOutCandles();
     }
-  }, [isBlowing]); // Trigger the effect when isBlowing changes
+  }, [isBlowing, blowOutCandles]); // Trigger the effect when isBlowing or blowOutCandles changes
 
   return (
     // Display the cake and candles on the screen using CSS classes
@@ -171,6 +184,34 @@ const BirthdayCake = () => {
           Click to Blow Candles
         </button>
       </div>
+
+      {shareUrl && (
+        <div className="flex justify-center mt-8">
+          <div className="w-full max-w-xs">
+            <label className="block text-gray-300 text-sm font-bold mb-2">
+              Share this celebration:
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={shareUrl}
+                readOnly
+                className="shadow appearance-none rounded flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl);
+                  alert("URL copied to clipboard!");
+                }}
+                className="bg-neutral-400 hover:bg-neutral-200 text-black font-bold py-2 px-4 rounded"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

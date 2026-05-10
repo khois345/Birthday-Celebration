@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { useUser } from "@/context/userContext";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Form = () => {
-  const {setName, setAge, regard, setRegard} = useUser();
+  const router = useRouter();
+  const { regard, saveUserData } = useUser();
   const [username, setUsername] = useState<string>("");
   const [userAge, setUserAge] = useState<number>(0);
   const [userRegard, setUserRegard] = useState<string>("");
@@ -52,27 +54,32 @@ const Form = () => {
   };
 
   // Set data on submit
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
     if (userAge === 0) {
       toast.warning("Please enter a valid age", { position: "top-center"});
-      
+      return;
     } else if (username === "") {
       toast.warning("Please enter a name", { position: "top-center"});
-      
-    } else if ((userAge === 0 || !userAge) && username === "") {
-      toast.warning("Please enter a name and a valid age",  { position: "top-center"});
-    } else if (userRegard !== "") {
-      setRegard(userRegard);
-      setName(username);
-      setAge(userAge);
-    } else {
-      setName(username);
-      setAge(userAge);
+      return;
     }
 
-    // Prevent the form from rendering the default page 
-    // (helps prevent losing the entered data on submit)
-    e.preventDefault();
+    // Save user data to database
+    const newSessionId = await saveUserData({
+      name: username,
+      age: userAge,
+      regard: userRegard || regard,
+    });
+    
+    if (!newSessionId) {
+      toast.error("Could not save birthday celebration", {
+        position: "top-center",
+      });
+      return;
+    }
+
+    router.push(`/${newSessionId}`);
   };
   //------------------------------------------------------------------------------------------------------------
 
