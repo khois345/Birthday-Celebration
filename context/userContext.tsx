@@ -80,7 +80,6 @@ const UserProvider = (props: any) => {
                 setName(data.user.name);
                 setAge(data.user.age);
                 setRegard(data.user.regard);
-                console.log("User data loaded from session:", data.user);
                 return true;
             } else {
                 console.log("No user data found for this session");

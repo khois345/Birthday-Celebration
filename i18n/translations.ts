@@ -1,0 +1,410 @@
+export type Locale = "en" | "vi" | "zh" | "ko" | "ja" | "es" | "id" | "th";
+
+export const supportedLocales: Locale[] = ["en", "vi", "zh", "ko", "ja", "es", "id", "th"];
+
+export function isLocale(value: string): value is Locale {
+  return supportedLocales.includes(value as Locale);
+}
+
+export const localePacks = {
+  en: {
+    form: {
+      title: "Enter the details of the birthday person",
+      nameLabel: "Enter name",
+      ageLabel: "Enter age",
+      regardLabel: "Enter birthday regard (optional)",
+      regardPlaceholder: "Max 100 characters",
+      submit: "Submit",
+      saving: "Saving...",
+      validationAge: "Please enter a valid age",
+      validationName: "Please enter a name",
+      rateLimit: "You have reached the daily session limit (5 requests). Please try again tomorrow.",
+      saveError: "Could not save birthday celebration",
+      defaultRegard: "Wish you a wonderful birthday!",
+    },
+    celebration: {
+      happyBirthday: "Happy Birthday!",
+      sessionMissing: "Session not found or has expired. Please check the link or create a new session.",
+    },
+    actions: {
+      shareLabel: "Share this celebration:",
+      copy: "Copy",
+      copied: "URL copied to clipboard!",
+      switchColor: "Switch Color",
+      backToHome: "Back to home",
+    },
+    cake: {
+      blowCandles: "Click to Blow Candles",
+      microphoneDenied: "Please allow microphone access for the full experience",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "About this website:",
+      builtWith: "built with Next.js, TypeScript, Tailwind CSS, SASS, and Framer Motion.",
+      hostedBy: "Hosted by Vercel.",
+      feedback: "Having feedback? Please visit",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  vi: {
+    form: {
+      title: "Vui lòng nhập thông tin của người được chúc",
+      nameLabel: "Nhập tên",
+      ageLabel: "Nhập tuổi",
+      regardLabel: "Nhập lời chúc sinh nhật (không bắt buộc)",
+      regardPlaceholder: "Tối đa 100 ký tự",
+      submit: "Xác nhận",
+      saving: "Đang lưu...",
+      validationAge: "Vui lòng nhập tuổi hợp lệ",
+      validationName: "Vui lòng nhập tên",
+      rateLimit: "Bạn đã đạt giới hạn tạo phiên trong ngày (5 lượt). Vui lòng thử lại vào ngày mai.",
+      saveError: "Không thể lưu buổi chúc mừng sinh nhật",
+      defaultRegard: "Chúc bạn có một ngày sinh nhật tuyệt vời!",
+    },
+    celebration: {
+      happyBirthday: "Chúc mừng sinh nhật!",
+      sessionMissing: "Không tìm thấy phiên hoặc phiên đã hết hạn. Vui lòng kiểm tra liên kết hoặc tạo phiên mới.",
+    },
+    actions: {
+      shareLabel: "Chia sẻ buổi chúc mừng này:",
+      copy: "Sao chép",
+      copied: "Đã sao chép liên kết!",
+      switchColor: "Đổi màu",
+      backToHome: "Quay về trang chủ",
+    },
+    cake: {
+      blowCandles: "Bấm để thổi nến",
+      microphoneDenied: "Vui lòng cấp quyền microphone để có trải nghiệm đầy đủ",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "Về trang web này:",
+      builtWith: "xây dựng bằng Next.js, TypeScript, Tailwind CSS, SASS và Framer Motion.",
+      hostedBy: "Được hosting bởi Vercel.",
+      feedback: "Bạn có góp ý? Vui lòng truy cập",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  zh: {
+    form: {
+      title: "请输入生日主角的信息",
+      nameLabel: "输入姓名",
+      ageLabel: "输入年龄",
+      regardLabel: "输入生日祝福（可选）",
+      regardPlaceholder: "最多 100 个字符",
+      submit: "提交",
+      saving: "正在保存...",
+      validationAge: "请输入有效年龄",
+      validationName: "请输入姓名",
+      rateLimit: "您已达到每日会话上限（5 次请求）。请明天再试。",
+      saveError: "无法保存生日庆祝会话",
+      defaultRegard: "祝你生日快乐，万事如意！",
+    },
+    celebration: {
+      happyBirthday: "生日快乐！",
+      sessionMissing: "未找到会话或会话已过期。请检查链接或创建新会话。",
+    },
+    actions: {
+      shareLabel: "分享这个庆祝链接：",
+      copy: "复制",
+      copied: "链接已复制！",
+      switchColor: "切换颜色",
+      backToHome: "返回首页",
+    },
+    cake: {
+      blowCandles: "点击吹灭蜡烛",
+      microphoneDenied: "请允许麦克风权限以获得完整体验",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "关于本网站：",
+      builtWith: "使用 Next.js、TypeScript、Tailwind CSS、SASS 和 Framer Motion 构建。",
+      hostedBy: "由 Vercel 托管。",
+      feedback: "有反馈吗？请访问",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  ko: {
+    form: {
+      title: "생일 주인공의 정보를 입력해 주세요",
+      nameLabel: "이름 입력",
+      ageLabel: "나이 입력",
+      regardLabel: "생일 메시지 입력 (선택)",
+      regardPlaceholder: "최대 100자",
+      submit: "제출",
+      saving: "저장 중...",
+      validationAge: "올바른 나이를 입력해 주세요",
+      validationName: "이름을 입력해 주세요",
+      rateLimit: "일일 세션 생성 한도(5회)에 도달했습니다. 내일 다시 시도해 주세요.",
+      saveError: "생일 축하 세션을 저장할 수 없습니다",
+      defaultRegard: "멋진 생일 보내세요!",
+    },
+    celebration: {
+      happyBirthday: "생일 축하해요!",
+      sessionMissing: "세션을 찾을 수 없거나 만료되었습니다. 링크를 확인하거나 새 세션을 만들어 주세요.",
+    },
+    actions: {
+      shareLabel: "이 축하 링크 공유:",
+      copy: "복사",
+      copied: "링크가 복사되었습니다!",
+      switchColor: "색상 변경",
+      backToHome: "홈으로",
+    },
+    cake: {
+      blowCandles: "클릭해서 촛불 끄기",
+      microphoneDenied: "전체 기능을 위해 마이크 권한을 허용해 주세요",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "이 웹사이트 소개:",
+      builtWith: "Next.js, TypeScript, Tailwind CSS, SASS, Framer Motion으로 제작되었습니다.",
+      hostedBy: "Vercel에서 호스팅됩니다.",
+      feedback: "피드백이 있으신가요? 방문해 주세요",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  ja: {
+    form: {
+      title: "お祝いする人の情報を入力してください",
+      nameLabel: "名前を入力",
+      ageLabel: "年齢を入力",
+      regardLabel: "誕生日メッセージを入力（任意）",
+      regardPlaceholder: "最大100文字",
+      submit: "送信",
+      saving: "保存中...",
+      validationAge: "有効な年齢を入力してください",
+      validationName: "名前を入力してください",
+      rateLimit: "1日のセッション上限（5回）に達しました。明日もう一度お試しください。",
+      saveError: "誕生日のお祝いセッションを保存できませんでした",
+      defaultRegard: "すてきな誕生日になりますように！",
+    },
+    celebration: {
+      happyBirthday: "お誕生日おめでとう！",
+      sessionMissing: "セッションが見つからないか、有効期限が切れています。リンクを確認するか新しいセッションを作成してください。",
+    },
+    actions: {
+      shareLabel: "このお祝いリンクを共有：",
+      copy: "コピー",
+      copied: "リンクをコピーしました！",
+      switchColor: "色を切り替え",
+      backToHome: "ホームへ戻る",
+    },
+    cake: {
+      blowCandles: "クリックしてろうそくを消す",
+      microphoneDenied: "全機能を利用するにはマイクの許可が必要です",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "このサイトについて：",
+      builtWith: "Next.js、TypeScript、Tailwind CSS、SASS、Framer Motion で構築しています。",
+      hostedBy: "Vercel でホスティングされています。",
+      feedback: "ご意見がありますか？こちらをご覧ください",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  es: {
+    form: {
+      title: "Ingresa los datos de la persona que cumple años",
+      nameLabel: "Ingresa el nombre",
+      ageLabel: "Ingresa la edad",
+      regardLabel: "Ingresa un mensaje de cumpleaños (opcional)",
+      regardPlaceholder: "Máximo 100 caracteres",
+      submit: "Enviar",
+      saving: "Guardando...",
+      validationAge: "Por favor ingresa una edad válida",
+      validationName: "Por favor ingresa un nombre",
+      rateLimit: "Has alcanzado el límite diario de sesiones (5 solicitudes). Inténtalo de nuevo mañana.",
+      saveError: "No se pudo guardar la celebración de cumpleaños",
+      defaultRegard: "¡Te deseo un cumpleaños maravilloso!",
+    },
+    celebration: {
+      happyBirthday: "¡Feliz cumpleaños!",
+      sessionMissing: "No se encontró la sesión o ha expirado. Verifica el enlace o crea una nueva sesión.",
+    },
+    actions: {
+      shareLabel: "Comparte esta celebración:",
+      copy: "Copiar",
+      copied: "¡Enlace copiado!",
+      switchColor: "Cambiar color",
+      backToHome: "Volver al inicio",
+    },
+    cake: {
+      blowCandles: "Haz clic para soplar las velas",
+      microphoneDenied: "Permite el acceso al micrófono para disfrutar la experiencia completa",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "Sobre este sitio web:",
+      builtWith: "construido con Next.js, TypeScript, Tailwind CSS, SASS y Framer Motion.",
+      hostedBy: "Alojado en Vercel.",
+      feedback: "¿Tienes comentarios? Visita",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",    },
+  },
+  id: {
+    form: {
+      title: "Masukkan detail orang yang merayakan hari jadi",
+      nameLabel: "Masukkan nama",
+      ageLabel: "Masukkan usia",
+      regardLabel: "Masukkan pesan hari jadi (opsional)",
+      regardPlaceholder: "Maksimal 100 karakter",
+      submit: "Kirim",
+      saving: "Menyimpan...",
+      validationAge: "Silakan masukkan usia yang valid",
+      validationName: "Silakan masukkan nama",
+      rateLimit: "Anda telah mencapai batas sesi harian (5 permintaan). Silakan coba lagi besok.",
+      saveError: "Tidak dapat menyimpan perayaan hari jadi",
+      defaultRegard: "Semoga hari jadimu penuh kebahagiaan!",
+    },
+    celebration: {
+      happyBirthday: "Selamat Hari Jadi!",
+      sessionMissing: "Sesi tidak ditemukan atau telah kedaluwarsa. Silakan periksa tautan atau buat sesi baru.",
+    },
+    actions: {
+      shareLabel: "Bagikan perayaan ini:",
+      copy: "Salin",
+      copied: "Tautan telah disalin!",
+      switchColor: "Ubah Warna",
+      backToHome: "Kembali ke beranda",
+    },
+    cake: {
+      blowCandles: "Klik untuk meniup lilin",
+      microphoneDenied: "Izinkan akses mikrofon untuk pengalaman lengkap",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "Tentang situs web ini:",
+      builtWith: "dibangun dengan Next.js, TypeScript, Tailwind CSS, SASS, dan Framer Motion.",
+      hostedBy: "Dihosting oleh Vercel.",
+      feedback: "Ada masukan? Silakan kunjungi",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+  th: {
+    form: {
+      title: "กรุณาใส่ข้อมูลของคนที่มีวันเกิด",
+      nameLabel: "ใส่ชื่อ",
+      ageLabel: "ใส่อายุ",
+      regardLabel: "ใส่ข้อความวันเกิด (ไม่บังคับ)",
+      regardPlaceholder: "สูงสุด 100 อักขระ",
+      submit: "ส่ง",
+      saving: "กำลังบันทึก...",
+      validationAge: "กรุณาใส่อายุที่ถูกต้อง",
+      validationName: "กรุณาใส่ชื่อ",
+      rateLimit: "คุณได้ถึงขีดจำกัดวันละครั้ง (5 คำขอ) แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้",
+      saveError: "ไม่สามารถบันทึกการเฉลิมฉลองวันเกิด",
+      defaultRegard: "ขอให้วันเกิดของคุณสุขสวรรค์!",
+    },
+    celebration: {
+      happyBirthday: "สุขสวัสดีวันเกิด!",
+      sessionMissing: "ไม่พบเซสชันหรือเซสชันหมดอายุแล้ว โปรดตรวจสอบลิงก์หรือสร้างเซสชันใหม่",
+    },
+    actions: {
+      shareLabel: "แบ่งปันการเฉลิมฉลองนี้:",
+      copy: "คัดลอก",
+      copied: "คัดลอกลิงก์แล้ว!",
+      switchColor: "เปลี่ยนสี",
+      backToHome: "กลับไปที่หน้าแรก",
+    },
+    cake: {
+      blowCandles: "คลิกเพื่อเป่าเทียน",
+      microphoneDenied: "โปรดอนุญาตการเข้าถึงไมโครโฟนเพื่อประสบการณ์ที่สมบูรณ์",
+    },
+    footer: {
+      rights: "All rights reserved.",
+      aboutTitle: "เกี่ยวกับเว็บไซต์นี้:",
+      builtWith: "สร้างด้วย Next.js, TypeScript, Tailwind CSS, SASS และ Framer Motion",
+      hostedBy: "โฮสต์โดย Vercel",
+      feedback: "มีข้อเสนอแนะหรือไม่? โปรดไปที่",
+    },
+    language: {
+      english: "English",
+      vietnamese: "Tiếng Việt",
+      chinese: "中文",
+      korean: "한국어",
+      japanese: "日本語",
+      spanish: "Español",
+      indonesian: "Bahasa Indonesia",
+      thai: "ไทย",
+    },
+  },
+} as const;
+
+export function getTranslations(locale: Locale) {
+  return localePacks[locale];
+}
+
+export function getLocalePrefix(pathname: string): "" | `/${Locale}` {
+  const path = pathname.toLowerCase();
+
+  for (const locale of supportedLocales) {
+    const prefix: `/${Locale}` = `/${locale}`;
+
+    if (path === prefix || path.startsWith(`${prefix}/`)) {
+      return prefix;
+    }
+  }
+
+  return "";
+}
