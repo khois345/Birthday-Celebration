@@ -2,7 +2,7 @@
 
 import React from "react";
 import "../app/birthday-cake.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import useMicrophone from "./useMicrophone";
 import { isMobile } from "react-device-detect";
@@ -82,6 +82,11 @@ const BirthdayCake = ({ cakeColors, locale }: BirthdayCakeProps) => {
 
   // Get the age from the user context
   const { age } = useUser();
+
+  // Memoize the layer styles to ensure consistency between server and client renders
+  const bottomLayerStyle = useMemo(() => buildLayerStyle(cakeColors.bottom), [cakeColors.bottom]);
+  const middleLayerStyle = useMemo(() => buildLayerStyle(cakeColors.middle), [cakeColors.middle]);
+  const topLayerStyle = useMemo(() => buildLayerStyle(cakeColors.top), [cakeColors.top]);
 
   if (DEBUG) {
     console.log("Volume:", microphoneVolume.toFixed(2), "Average:", averageVolume.toFixed(2), "Blowing:", isBlowing);
@@ -172,9 +177,9 @@ const BirthdayCake = ({ cakeColors, locale }: BirthdayCakeProps) => {
       <div className="flex justify-center">
         <div className="cake">
           <div className="plate"></div>
-          <div className="layer layer-bottom" style={buildLayerStyle(cakeColors.bottom)}></div>
-          <div className="layer layer-middle" style={buildLayerStyle(cakeColors.middle)}></div>
-          <div className="layer layer-top" style={buildLayerStyle(cakeColors.top)}></div>
+          <div className="layer layer-bottom" style={bottomLayerStyle}></div>
+          <div className="layer layer-middle" style={middleLayerStyle}></div>
+          <div className="layer layer-top" style={topLayerStyle}></div>
           <div
             className="icing"
             style={{

@@ -24,6 +24,7 @@ export default function RootLayout({
       <body
         className={`${inter.className}
       bg-neutral-800`}
+        suppressHydrationWarning
       >
         <Suspense>
           <UserProvider>

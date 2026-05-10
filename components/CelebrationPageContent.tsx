@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BirthdayCake from "@/components/BirthdayCake";
-import { CakeColors, getRandomCakeColors } from "@/components/cakePalettes";
+import { CakeColors, cakePalettes, getRandomCakeColors } from "@/components/cakePalettes";
 import QuickActions from "@/components/QuickActions";
 import { useUser } from "@/context/userContext";
 import { Locale, getLocalePrefix, getTranslations } from "@/i18n/translations";
@@ -18,7 +18,7 @@ export default function CelebrationPageContent({ sessionId, locale }: Celebratio
   const router = useRouter();
   const { name, regard, loadUserData } = useUser();
   const [shareUrl, setShareUrl] = useState("");
-  const [cakeColors, setCakeColors] = useState<CakeColors>(() => getRandomCakeColors());
+  const [cakeColors, setCakeColors] = useState<CakeColors>(() => cakePalettes[0]);
   const texts = getTranslations(locale);
 
   useEffect(() => {
@@ -31,6 +31,10 @@ export default function CelebrationPageContent({ sessionId, locale }: Celebratio
   useEffect(() => {
     (window as unknown as { __cakeColors?: CakeColors }).__cakeColors = cakeColors;
   }, [cakeColors]);
+
+  useEffect(() => {
+    setCakeColors(getRandomCakeColors());
+  }, []);
 
   useEffect(() => {
     if (sessionId) {
@@ -56,13 +60,13 @@ export default function CelebrationPageContent({ sessionId, locale }: Celebratio
   return (
     <>
       <div className="items-center justify-center flex flex-col text-white text-center">
-        <h1 className="text-4xl font-medium mb-2 mt-8">
+        <h1 className="text-4xl font-medium mb-2 mt-8 px-4 lg:px-0">
           {name},{" "}
           <span className="text-transparent font-extrabold bg-clip-text bg-gradient-to-r from-red-500 via-yellow-400 via-30% to-sky-400">
             {texts.celebration.happyBirthday}
           </span>
         </h1>
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto px-4 lg:px-0">
           {" "}
           {/* Centered container with maximum width of 500px */}
           <p className="text-lg mb-4 whitespace-normal font-light break-words text-gray-300">{regard}</p>
