@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Happy Birthday! 🎉🎂🎈",
   description: "A virtual birthday celebration with a birthday cake and a form to enter your name and age.",
+  verification: {
+    google: "iWpUj3k0HmGVT6Vy6w98LZcck7swpHECZHGyK83WKbY",
+  },
 };
 
 export default function RootLayout({
