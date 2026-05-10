@@ -168,7 +168,8 @@ const Form = ({ locale }: FormProps) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               maxLength={20}
-              className="shadow appearance-none rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder={texts.form.namePlaceholder}
+              className="shadow appearance-none rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
 
@@ -207,8 +208,9 @@ const Form = ({ locale }: FormProps) => {
               </button>
               <input
                 type="number"
-                value={userAge}
+                value={userAge || ""}
                 onChange={(e) => setUserAge(handleUserAgeChange(parseInt(e.target.value)))}
+                placeholder={texts.form.agePlaceholder}
                 className="shadow appearance-none w-full py-2 text-gray-700 text-center leading-tight focus:outline-none"
               />
               <button

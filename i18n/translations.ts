@@ -11,7 +11,9 @@ export const localePacks = {
     form: {
       title: "Enter the details of the birthday person",
       nameLabel: "Enter name",
+      namePlaceholder: "e.g. John",
       ageLabel: "Enter age",
+      agePlaceholder: "e.g. 20",
       regardLabel: "Enter birthday regard (optional)",
       regardPlaceholder: "Max 100 characters",
       submit: "Submit",
@@ -59,7 +61,9 @@ export const localePacks = {
     form: {
       title: "Vui lòng nhập thông tin của người được chúc",
       nameLabel: "Nhập tên",
+      namePlaceholder: "vd: Nguyễn Văn A",
       ageLabel: "Nhập tuổi",
+      agePlaceholder: "vd: 20",
       regardLabel: "Nhập lời chúc sinh nhật (không bắt buộc)",
       regardPlaceholder: "Tối đa 100 ký tự",
       submit: "Xác nhận",
@@ -107,7 +111,9 @@ export const localePacks = {
     form: {
       title: "请输入生日主角的信息",
       nameLabel: "输入姓名",
+      namePlaceholder: "例：张三",
       ageLabel: "输入年龄",
+      agePlaceholder: "例：20",
       regardLabel: "输入生日祝福（可选）",
       regardPlaceholder: "最多 100 个字符",
       submit: "提交",
@@ -155,7 +161,9 @@ export const localePacks = {
     form: {
       title: "생일 주인공의 정보를 입력해 주세요",
       nameLabel: "이름 입력",
+      namePlaceholder: "예: 홍길동",
       ageLabel: "나이 입력",
+      agePlaceholder: "예: 20",
       regardLabel: "생일 메시지 입력 (선택)",
       regardPlaceholder: "최대 100자",
       submit: "제출",
@@ -203,7 +211,9 @@ export const localePacks = {
     form: {
       title: "お祝いする人の情報を入力してください",
       nameLabel: "名前を入力",
+      namePlaceholder: "例：田中太郎",
       ageLabel: "年齢を入力",
+      agePlaceholder: "例：20",
       regardLabel: "誕生日メッセージを入力（任意）",
       regardPlaceholder: "最大100文字",
       submit: "送信",
@@ -251,7 +261,9 @@ export const localePacks = {
     form: {
       title: "Ingresa los datos de la persona que cumple años",
       nameLabel: "Ingresa el nombre",
+      namePlaceholder: "ej: Juan",
       ageLabel: "Ingresa la edad",
+      agePlaceholder: "ej: 20",
       regardLabel: "Ingresa un mensaje de cumpleaños (opcional)",
       regardPlaceholder: "Máximo 100 caracteres",
       submit: "Enviar",
@@ -297,7 +309,9 @@ export const localePacks = {
     form: {
       title: "Masukkan detail orang yang merayakan hari jadi",
       nameLabel: "Masukkan nama",
+      namePlaceholder: "mis: Budi",
       ageLabel: "Masukkan usia",
+      agePlaceholder: "mis: 20",
       regardLabel: "Masukkan pesan hari jadi (opsional)",
       regardPlaceholder: "Maksimal 100 karakter",
       submit: "Kirim",
@@ -345,7 +359,9 @@ export const localePacks = {
     form: {
       title: "กรุณาใส่ข้อมูลของคนที่มีวันเกิด",
       nameLabel: "ใส่ชื่อ",
+      namePlaceholder: "เช่น: สมชาย",
       ageLabel: "ใส่อายุ",
+      agePlaceholder: "เช่น: 20",
       regardLabel: "ใส่ข้อความวันเกิด (ไม่บังคับ)",
       regardPlaceholder: "สูงสุด 100 อักขระ",
       submit: "ส่ง",

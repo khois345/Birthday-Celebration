@@ -33,13 +33,6 @@ const UserProvider = (props: any) => {
     const [age, setAge] = useState(0);
     const [regard, setRegard] = useState<string>("Wish you a wonderful birthday!");
 
-    useEffect(() => {
-        const savedRegard = localStorage.getItem("regard");
-        if (savedRegard) {
-            setRegard(savedRegard);
-        }
-    }, []);
-
     const saveUserData = async (userData: { name: string; age: number; regard: string }) => {
         try {
             const response = await fetch("/api/birthday-session", {
