@@ -10,7 +10,7 @@ const texts = getTranslations(locale);
 return (
     <footer className='relative bottom-0 left-0 w-full mt-10 text-center text-gray-400 pb-8 px-4'>
         <small className='mb-2 block text-xs'>
-            &copy; 2026 Tran. {texts.footer.rights}
+            &copy; {new Date().getFullYear()} Tran. {texts.footer.rights}
         </small>
 
         <div className='text-xs'>
