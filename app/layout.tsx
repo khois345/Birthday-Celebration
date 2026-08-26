@@ -9,9 +9,41 @@ import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const BASE_URL = "https://birthday-celebration-olive.vercel.app";
+
 export const metadata: Metadata = {
   title: "Happy Birthday! 🎉🎂🎈",
-  description: "A virtual birthday celebration with a birthday cake and a form to enter your name and age.",
+  description:
+    "Celebrate birthdays virtually with an animated birthday cake. Enter your name and age to get a personalized birthday greeting — share it with friends and family!",
+  metadataBase: new URL(BASE_URL),
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/",
+      es: "/es",
+      ja: "/ja",
+      ko: "/ko",
+      vi: "/vi",
+      zh: "/zh",
+      id: "/id",
+      th: "/th",
+    },
+  },
+  openGraph: {
+    title: "Happy Birthday! 🎉🎂🎈",
+    description:
+      "Celebrate birthdays virtually with an animated birthday cake. Enter your name and age to get a personalized birthday greeting — share it with friends and family!",
+    url: BASE_URL,
+    siteName: "Birthday Celebration",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Happy Birthday! 🎉🎂🎈",
+    description:
+      "Celebrate birthdays virtually with an animated birthday cake. Enter your name and age to get a personalized birthday greeting!",
+  },
   verification: {
     google: "iWpUj3k0HmGVT6Vy6w98LZcck7swpHECZHGyK83WKbY",
   },
